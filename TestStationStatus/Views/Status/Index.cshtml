@@ -1,0 +1,36 @@
+﻿@model TestStationStatus.Models.StatusModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>StatusView</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th></th>
+    </tr>
+
+    <div class="editor-label">
+
+        @Html.LabelFor(model => model.ApplicationStatus)
+        @Model.ApplicationStatus
+    </div>
+
+@foreach (var item in Model.StatusFile)
+{
+    <tr>
+        <td>
+            @item
+
+        </td>
+    </tr>
+}
+
+
+
+</table>
+
