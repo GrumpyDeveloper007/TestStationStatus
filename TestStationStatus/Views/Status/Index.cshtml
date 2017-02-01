@@ -1,4 +1,49 @@
 ﻿@model TestStationStatus.Models.StatusModel
+<style type="text/css">
+    .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+        border-color: #ccc;
+    }
+
+        .tg td {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            padding: 10px 5px;
+            border-style: solid;
+            border-width: 1px;
+            overflow: hidden;
+            word-break: normal;
+            border-color: #ccc;
+            color: #333;
+            background-color: #fff;
+        }
+
+        .tg th {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: normal;
+            padding: 10px 5px;
+            border-style: solid;
+            border-width: 1px;
+            overflow: hidden;
+            word-break: normal;
+            border-color: #ccc;
+            color: #333;
+            background-color: #f0f0f0;
+        }
+
+        .tg .tg-88oy {
+            font-size: xx-small;
+            text-align: center;
+            vertical-align: top;
+        }
+
+        .tg .tg-yw4l {
+            vertical-align: top;
+        }
+</style>
+
 <meta http-equiv="refresh" content="2">
 @{
     ViewBag.Title = "Index";
@@ -29,7 +74,7 @@
 </div>
 
     <h3>Actions</h3>
-<table class="table">
+<table class="tg">
 
     @foreach (var item in Model.StatusFile)
     {
@@ -41,12 +86,12 @@
     }
 </table>
 <h3>Results </h3>
-<table class="table">
+<table class="tg">
 
     @foreach (var item in Model.ResultsFile)
     {
         <tr>
-            <td>
+            <td class="tg-yw4l">
                 @item
             </td>
         </tr>
