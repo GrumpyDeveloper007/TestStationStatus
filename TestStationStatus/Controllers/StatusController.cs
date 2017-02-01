@@ -19,33 +19,42 @@ namespace TestStationStatus.Controllers
                 model = new StatusModel();
 
             }
-            var lines = System.IO.File.ReadAllLines(@"C:\kf2_ats\e420\ApplicationSummary.txt");
-            model.ApplicationStatus = "Idle";
-            model.StatusFile.Clear();
-            model.StatusFile.AddRange(lines);
-            if (System.IO.File.Exists(@"C:\kf2_ats\e420\ApplicationStatus.txt"))
+            try
+
             {
-                var status = System.IO.File.ReadAllLines(@"C:\kf2_ats\e420\ApplicationStatus.txt");
-                model.ApplicationStatus = status[0];
-                if (status.Count() >1)
+                model.StatusFile.Clear();
+                model.ResultsFile.Clear();
+                model.ApplicationStatus = "";
+
+                var lines = System.IO.File.ReadAllLines(@"C:\kf2_ats\e420\ApplicationSummary.txt");
+                model.StatusFile.AddRange(lines);
+                if (System.IO.File.Exists(@"C:\kf2_ats\e420\ApplicationStatus.txt"))
                 {
-                    model.LastUpdateTime = status[1];
+                    var status = System.IO.File.ReadAllLines(@"C:\kf2_ats\e420\ApplicationStatus.txt");
+                    model.ApplicationStatus = status[0];
+                    if (status.Count() > 1)
+                    {
+                        model.LastUpdateTime = status[1];
+                    }
+                    if (status.Count() > 2)
+                    {
+                        model.TestScript = status[2];
+                    }
+                    if (status.Count() > 3)
+                    {
+                        model.LogFile = status[3];
+                    }
                 }
-                if (status.Count() > 2)
+
+                if (System.IO.File.Exists(@"C:\kf2_ats\e420\ApplicationResults.txt"))
                 {
-                    model.TestScript = status[2];
-                }
-                if (status.Count() > 3)
-                {
-                    model.LogFile = status[3];
+                    lines = System.IO.File.ReadAllLines(@"C:\kf2_ats\e420\ApplicationResults.txt");
+                    model.ResultsFile.AddRange(lines);
                 }
             }
-
-            if (System.IO.File.Exists(@"C:\kf2_ats\e420\ApplicationResults.txt"))
+            catch (Exception ex)
             {
-                lines = System.IO.File.ReadAllLines(@"C:\kf2_ats\e420\ApplicationResults.txt");
-                model.ResultsFile.Clear();
-                model.ResultsFile.AddRange(lines);
+                model.ApplicationStatus = "File locked";
             }
 
 

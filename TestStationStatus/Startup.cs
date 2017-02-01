@@ -1,5 +1,6 @@
 ﻿using Microsoft.Owin;
 using Owin;
+using TestStationStatusInfrastructure;
 
 [assembly: OwinStartupAttribute(typeof(TestStationStatus.Startup))]
 namespace TestStationStatus
@@ -8,6 +9,8 @@ namespace TestStationStatus
     {
         public void Configuration(IAppBuilder app)
         {
+            test database = new test();
+            database.Test();
             ConfigureAuth(app);
         }
     }
