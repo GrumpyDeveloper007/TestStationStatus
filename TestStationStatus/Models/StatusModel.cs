@@ -14,12 +14,16 @@ namespace TestStationStatus.Models
         public string LogFile { get; set; }
         private List<string> _statusFile;
         private List<string> _ResultsFile;
+        public List<string> QueueItems;
+        public List<string> MonitorFiles;
 
 
         public StatusModel()
         {
             _statusFile = new List<string>();
             _ResultsFile = new List<string>();
+            QueueItems = new List<string>();
+            MonitorFiles = new List<string>();
         }
 
 

@@ -1,4 +1,52 @@
 ﻿@model TestStationStatus.Models.StatusModel
+<script type="text/javascript" src="~/signalr/hubs"></script>
+<script type="text/javascript" src="@Url.Content("~/content/scripts/jquery.signalR-2.2.1.min.js")"></script>
+<script src="~/Scripts/jquery-1.10.2.min.js" ></script>
+
+<!--Add script to update the page and send messages.-->
+<script type="text/javascript">
+
+   $(function() {
+      // Save the reference to the SignalR hub
+      var theHub = $.connection.yourAppHub;
+
+      // Invoke the function to be called back from the server
+      // when changes are detected
+      theHub.client.refreshPage = function () {
+          $.ajax({
+              url: '/status/index',
+              success: function (data) {
+                  if (data == "refresh") {
+                      window.location.reload(); // This is not jQuery but simple plain ol' JS
+                  }
+              }
+          });
+      };
+
+      // Start the SignalR client-side listener
+      $.connection.hub.start().done(function () {
+         // Do here any initialization work you may need
+
+      });
+   });
+
+   var theHub = $.connection.yourAppHub;
+   theHub.client.refreshPage = function () {
+       // Sample code to refresh the page based on information coming
+       // from the server.
+       $.ajax({
+           url: '/status/index',
+           success: function (data) {
+               if (data == "refresh") {
+                   window.location.reload(); // This is not jQuery but simple plain ol' JS
+               }
+           }
+       });
+   };
+</script>
+
+
+
 <style type="text/css">
     .tg {
         border-collapse: collapse;
@@ -105,6 +153,35 @@
         </td>
 </tr>
 </table>
+
+
+<p>Queue</p>
+<table class="tg">
+
+    @foreach (var item in Model.QueueItems)
+{
+        <tr>
+            <td>
+                @item
+            </td>
+        </tr>
+    }
+</table>
+
+<p>Monitor</p>
+<table class="tg">
+
+    @foreach (var item in Model.MonitorFiles)
+{
+        <tr>
+            <td class="tg-yw4l">
+                @item
+            </td>
+        </tr>
+    }
+</table>
+
+
 
 
 
