@@ -18,6 +18,7 @@ namespace TestStationStatusDomain.Entities
         public virtual string LogFileName { get; set; }
         public List<string> Commands = new List<string>();
         public List<string> Results = new List<string>();
+        public virtual double DurationSeconds { get; set; }
 
         public string CommandsMeta
         {

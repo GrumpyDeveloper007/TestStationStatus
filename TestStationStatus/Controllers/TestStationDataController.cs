@@ -15,7 +15,18 @@ namespace TestStationStatus.Controllers
         // GET: api/API
         public IEnumerable<StatusUpdate> Get()
         {
-            return new StatusUpdate[] { new StatusUpdate { Status = "busy" }, new StatusUpdate { Status = "Idle" } };
+            try
+            {
+                using (var ctx = new TestStationContext())
+                {
+
+                    return ctx.CurrentStationStatus.ToArray ();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new StatusUpdate[] { new StatusUpdate { Status = ex.Message } };
+            }
         }
 
         // GET: api/API/5
@@ -30,10 +41,10 @@ namespace TestStationStatus.Controllers
             using (var ctx = new TestStationContext())
             {
 
-                if (value.Status == "Completed")
+                if (value.Status == "Completed")//|| value.Status == "Terminated"
                 {
                     CompletedTest completedTest = new CompletedTest
-                    { LogFileName = value.LogFileName, TestCaseName = value.TestCaseName, TestStationName = value.TestStationName, Commands = value.Last10Commands, Results = value.Last10Results };
+                    { LogFileName = value.LogFileName, TestCaseName = value.TestCaseName, TestStationName = value.TestStationName, Commands = value.Last10Commands, Results = value.Last10Results, DurationSeconds=value.DurationSeconds };
 
                     ctx.CompletedTests.Add(completedTest);
                     ctx.SaveChanges();

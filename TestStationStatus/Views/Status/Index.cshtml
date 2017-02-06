@@ -92,7 +92,7 @@
         }
 </style>
 
-<meta http-equiv="refresh" content="2">
+<meta http-equiv="refresh" content="10">
 @{
     ViewBag.Title = "Index";
 }
@@ -101,6 +101,7 @@
 
 <p>
     @Html.ActionLink("Create New", "Create")
+    <input type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Status")'" />
 </p>
     <tr>
         <th></th>

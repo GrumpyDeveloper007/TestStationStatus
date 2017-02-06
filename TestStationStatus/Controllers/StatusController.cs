@@ -15,15 +15,21 @@ namespace TestStationStatus.Controllers
         private System.Threading.Thread background;
         private yourAppHub hub = new yourAppHub();
 
-            private void thread()
+        private void thread()
         {
 
-            while(true )
+            while (true)
             {
                 System.Threading.Thread.Sleep(10);
                 var context = GlobalHost.ConnectionManager.GetHubContext<yourAppHub>();
                 context.Clients.All.refreshPage();
             }
+        }
+
+        public ActionResult Cancel()
+        {
+            System.IO.File.WriteAllText(@"C:\kf2_ats\e420\KillSwitch.txt","Stop");
+            return Redirect(Request.UrlReferrer.ToString());
         }
 
         // GET: Status
@@ -68,29 +74,29 @@ namespace TestStationStatus.Controllers
                     model.ResultsFile.AddRange(lines);
                 }
 
-                var queueItems = System.IO.Directory.GetFiles (@"C:\kf2_ats\queue\", "*.TST");
+                var queueItems = System.IO.Directory.GetFiles(@"C:\kf2_ats\queue\", "*.TST");
                 var completedItems = System.IO.Directory.GetFiles(@"C:\kf2_ats\queue\", "*.LST");
                 model.QueueItems.Clear();
                 foreach (string item in queueItems)
                 {
-                    bool found = false; 
-                    string fileName= System.IO.Path.GetFileNameWithoutExtension(item);
-                    foreach (string completedItem in completedItems )
+                    bool found = false;
+                    string fileName = System.IO.Path.GetFileNameWithoutExtension(item);
+                    foreach (string completedItem in completedItems)
                     {
-                        if (completedItem.Contains (fileName ))
+                        if (completedItem.Contains(fileName))
                         {
                             found = true;
                             break;
                         }
                     }
 
-                    if (found ==false )
+                    if (found == false)
                     {
                         model.QueueItems.Add(fileName);
                     }
                 }
 
-                var monitorFiles= System.IO.Directory.GetFiles(@"C:\KF2_ATS\E420MonitorTestPlan", "*.TST");
+                var monitorFiles = System.IO.Directory.GetFiles(@"C:\KF2_ATS\E420MonitorTestPlan", "*.TST");
                 model.MonitorFiles = monitorFiles.ToList();
 
             }
