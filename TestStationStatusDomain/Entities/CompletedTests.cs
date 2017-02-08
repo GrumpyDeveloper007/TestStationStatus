@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Json;
 using System.IO;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TestStationStatusDomain.Entities
 {
@@ -19,7 +20,12 @@ namespace TestStationStatusDomain.Entities
         public List<string> Commands = new List<string>();
         public List<string> Results = new List<string>();
         public virtual double DurationSeconds { get; set; }
+        public virtual bool TestStatus { get; set; }
 
+        public virtual DateTime StartTime { get; set; }
+
+        [Column(TypeName = "ntext")]
+        [MaxLength]
         public string CommandsMeta
         {
             get
@@ -50,6 +56,8 @@ namespace TestStationStatusDomain.Entities
 
         }
 
+        [Column(TypeName = "ntext")]
+        [MaxLength]
         public string ResultsMeta
         {
             get

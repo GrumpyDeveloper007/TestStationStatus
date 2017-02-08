@@ -18,6 +18,14 @@ namespace TestStationStatus.Models
         public List<string> MonitorFiles;
 
 
+        public string LastUpdateTimeString
+        {
+            get
+            {
+                return TimeSpan.FromSeconds(double.Parse(LastUpdateTime)).ToString();
+            }
+        }
+
         public StatusModel()
         {
             _statusFile = new List<string>();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Json;
@@ -17,9 +18,15 @@ namespace TestStationStatusDomain.Entities
         public virtual string TestCaseName { get; set; }
         public virtual string LogFileName { get; set; }
         public virtual double DurationSeconds { get; set; }
+        public virtual DateTime StartTime { get; set; }
+        public virtual bool TestStatus { get; set; }
+
+
         public List<string> Last10Commands = new List<string>();
         public List<string> Last10Results = new List<string>();
 
+        [Column(TypeName = "ntext")]
+        [MaxLength]
         public string CommandsMeta
         {
             get
@@ -50,6 +57,8 @@ namespace TestStationStatusDomain.Entities
 
         }
 
+        [Column(TypeName = "ntext")]
+        [MaxLength]
         public string ResultsMeta
         {
             get
