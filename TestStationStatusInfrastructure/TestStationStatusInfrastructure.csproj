@@ -56,6 +56,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbSetExtension.cs" />
+    <Compile Include="PoorMansIOC.cs" />
+    <Compile Include="Service\LocalTestDataService.cs" />
+    <Compile Include="Service\ServerDataService.cs" />
     <Compile Include="TestStationContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="test.cs" />

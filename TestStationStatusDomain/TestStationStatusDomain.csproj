@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\CompletedTests.cs" />
+    <Compile Include="Entities\StatusModel.cs" />
     <Compile Include="Entities\StatusUpdate.cs" />
     <Compile Include="Entities\TestStationStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
