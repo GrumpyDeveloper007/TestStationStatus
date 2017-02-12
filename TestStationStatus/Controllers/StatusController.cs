@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,9 +30,25 @@ namespace TestStationStatus.Controllers
 
             while (true)
             {
-                System.Threading.Thread.Sleep(10);
-                var context = GlobalHost.ConnectionManager.GetHubContext<yourAppHub>();
-                context.Clients.All.refreshPage();
+                var context = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+                context.Clients.All.newMessage("test3");
+
+                var context2 = GlobalHost.ConnectionManager.GetHubContext<yourAppHub>();
+                IHubConnectionContext<dynamic> Clients = context2.Clients;
+                Clients.All.refreshPage();
+
+                System.Threading.Thread.Sleep(10000);
+
+                
+
+
+               /* var hubConnection = new HubConnection("http://localhost/SimpleChat");
+
+                chat = hubConnection.CreateHubProxy("chat");
+
+                chat.On<string>("newMessage",
+                                msg => messages.Invoke(new Action(() =>
+                                                                  messages.Items.Add(msg))));*/
             }
         }
 
@@ -47,8 +64,8 @@ namespace TestStationStatus.Controllers
             if (_model == null)
             {
                 _model = new StatusViewModel();
-                //background = new System.Threading.Thread(new System.Threading.ThreadStart(thread));
-                //background.Start();
+                background = new System.Threading.Thread(new System.Threading.ThreadStart(thread));
+                background.Start();
             }
 
             var model = localDataService.GetModelFromLocalFiles();

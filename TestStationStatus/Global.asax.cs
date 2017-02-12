@@ -14,6 +14,9 @@ namespace TestStationStatus
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
+
+            //RouteTable.Routes.MapHubs();
+
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

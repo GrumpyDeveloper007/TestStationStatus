@@ -1,108 +1,110 @@
-﻿@model TestStationStatus.Models.StatusViewModel
-<script type="text/javascript" src="~/signalr/hubs"></script>
-<script type="text/javascript" src="@Url.Content("~/content/scripts/jquery.signalR-2.2.1.min.js")"></script>
-<script src="~/Scripts/jquery-1.10.2.min.js" ></script>
+﻿<html>
+<head>
 
-<!--Add script to update the page and send messages.-->
-<script type="text/javascript">
+    @model TestStationStatus.Models.StatusViewModel
 
-   $(function() {
-      // Save the reference to the SignalR hub
-      var theHub = $.connection.yourAppHub;
-
-      // Invoke the function to be called back from the server
-      // when changes are detected
-      theHub.client.refreshPage = function () {
-          $.ajax({
-              url: '/status/index',
-              success: function (data) {
-                  if (data == "refresh") {
-                      window.location.reload(); // This is not jQuery but simple plain ol' JS
-                  }
-              }
-          });
-      };
-
-      // Start the SignalR client-side listener
-      $.connection.hub.start().done(function () {
-         // Do here any initialization work you may need
-
-      });
-   });
-
-   var theHub = $.connection.yourAppHub;
-   theHub.client.refreshPage = function () {
-       // Sample code to refresh the page based on information coming
-       // from the server.
-       $.ajax({
-           url: '/status/index',
-           success: function (data) {
-               if (data == "refresh") {
-                   window.location.reload(); // This is not jQuery but simple plain ol' JS
-               }
-           }
-       });
-   };
-</script>
+    @section scripts{
+        @*/* load your scripts here. You can exclude jQuery,
+            coz it's already in the template */ *@
+    <script src="~/Scripts/jquery-1.10.2.js" type="text/javascript"></script>
+        <script src="~/Scripts/bootstrap.js"></script>
+        <script src="~/Scripts/jquery.signalR-2.2.1.js"></script>
+        <script src="~/signalr/hubs"></script>
 
 
+    <!--Add script to update the page and send messages.-->
+    <script type="text/javascript">
+        var chat;
 
-<style type="text/css">
-    .tg {
-        border-collapse: collapse;
-        border-spacing: 0;
-        border-color: #ccc;
+        $(function () {
+            $.connection.hub.logging = true;
+
+            chat = $.connection.yourAppHub;
+            chat.client.refreshPage = onNewMessage;
+
+            $.connection.hub.start({ transport: 'longPolling' });
+        });
+
+        function onNewMessage(message) {
+            // ... todo: validation !!!! :)
+            //alert("Updated: ");
+            $.ajax({
+                url: '',
+                success: function (data) {
+                    window.location.reload(); // This is not jQuery but simple plain ol' JS
+                    if (data == "refresh") {
+                    }
+                }
+            });
+        };
+
+
+        $.connection.hub.error(function (err) {
+            alert("An error occured: " + err);
+        });
+    </script>
     }
 
-        .tg td {
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            padding: 10px 5px;
-            border-style: solid;
-            border-width: 1px;
-            overflow: hidden;
-            word-break: normal;
+
+</head>
+
+<body>
+    <style type="text/css">
+        .tg {
+            border-collapse: collapse;
+            border-spacing: 0;
             border-color: #ccc;
-            color: #333;
-            background-color: #fff;
         }
 
-        .tg th {
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            font-weight: normal;
-            padding: 10px 5px;
-            border-style: solid;
-            border-width: 1px;
-            overflow: hidden;
-            word-break: normal;
-            border-color: #ccc;
-            color: #333;
-            background-color: #f0f0f0;
-        }
+            .tg td {
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+                padding: 10px 5px;
+                border-style: solid;
+                border-width: 1px;
+                overflow: hidden;
+                word-break: normal;
+                border-color: #ccc;
+                color: #333;
+                background-color: #fff;
+            }
 
-        .tg .tg-88oy {
-            font-size: xx-small;
-            text-align: center;
-            vertical-align: top;
-        }
+            .tg th {
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+                font-weight: normal;
+                padding: 10px 5px;
+                border-style: solid;
+                border-width: 1px;
+                overflow: hidden;
+                word-break: normal;
+                border-color: #ccc;
+                color: #333;
+                background-color: #f0f0f0;
+            }
 
-        .tg .tg-yw4l {
-            vertical-align: top;
-        }
-</style>
+            .tg .tg-88oy {
+                font-size: xx-small;
+                text-align: center;
+                vertical-align: top;
+            }
 
-<meta http-equiv="refresh" content="10">
-@{
-    ViewBag.Title = "Index";
-}
+            .tg .tg-yw4l {
+                vertical-align: top;
+            }
+    </style>
 
-<h2>StatusView</h2>
+    <!--<meta http-equiv="refresh" content="10">-->
+    @{
+        ViewBag.Title = "Index";
+    }
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-    <input type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Status")'" />
-</p>
+    <h2>StatusView</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+        <input type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Status")'" />
+    </p>
     <tr>
         <th></th>
     </tr>
@@ -112,77 +114,74 @@
         @Model.ApplicationStatus
     </div>
 
-<div class="editor-label">
-    @Html.LabelFor(model => model.TestScript)
-    @Model.TestScript
-</div>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.TestScript)
+        @Model.TestScript
+    </div>
 
-<div class="editor-label">
-    @Html.LabelFor(model => model.LastUpdateTime)
-    @Model.LastUpdateTimeString
-</div>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.LastUpdateTime)
+        @Model.LastUpdateTimeString
+    </div>
 
-<table>
-    <tr>
-        <td>
-            <p>Actions</p>
-            <table class="tg">
-
-                @foreach (var item in Model.StatusFile)
-            {
-                    <tr>
-                        <td>
-                            @item
-                        </td>
-                    </tr>
-                }
-            </table>
-        </td>
-        <td>
-            <p>Results </p>
-            <table class="tg">
-
-                @foreach (var item in Model.ResultsFile)
-            {
-                    <tr>
-                        <td class="tg-yw4l">
-                            @item
-                        </td>
-                    </tr>
-                }
-            </table>
-        </td>
-</tr>
-</table>
-
-
-<p>Queue</p>
-<table class="tg">
-
-    @foreach (var item in Model.QueueItems)
-{
+    <table>
         <tr>
             <td>
-                @item
+                <p>Actions</p>
+                <table class="tg">
+
+                    @foreach (var item in Model.StatusFile)
+            {
+                        <tr>
+                            <td>
+                                @item
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </td>
+            <td>
+                <p>Results </p>
+                <table class="tg">
+
+                    @foreach (var item in Model.ResultsFile)
+            {
+                        <tr>
+                            <td class="tg-yw4l">
+                                @item
+                            </td>
+                        </tr>
+                    }
+                </table>
             </td>
         </tr>
-    }
-</table>
-
-<p>Monitor</p>
-<table class="tg">
-
-    @foreach (var item in Model.MonitorFiles)
-{
-        <tr>
-            <td class="tg-yw4l">
-                @item
-            </td>
-        </tr>
-    }
-</table>
+    </table>
 
 
+    <p>Queue</p>
+    <table class="tg">
 
+        @foreach (var item in Model.QueueItems)
+        {
+            <tr>
+                <td>
+                    @item
+                </td>
+            </tr>
+        }
+    </table>
 
+    <p>Monitor</p>
+    <table class="tg">
 
+        @foreach (var item in Model.MonitorFiles)
+        {
+            <tr>
+                <td class="tg-yw4l">
+                    @item
+                </td>
+            </tr>
+        }
+    </table>
+</body>
+</html>

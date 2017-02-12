@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 
 namespace TestStationStatus
 {
-    public class yourAppHub : Hub
+    [HubName("monitor")]
+    public class MonitorHub : Hub
     {
 
-        public void refreshPage()
-        {
-            Clients.All.refreshPage();
-        }
-
     }
-
 }
