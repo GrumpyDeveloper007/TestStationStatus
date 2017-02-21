@@ -6,7 +6,7 @@ using System.Web;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 
-namespace TestStationStatus
+namespace TestStationStatusInfrastructure.Hubs
 {
     [HubName("chat")]
     public class ChatHub : Hub
@@ -65,8 +65,8 @@ namespace TestStationStatus
 
         private void SendMonitoringData(string eventType, string connection)
         {
-            var context = GlobalHost.ConnectionManager.GetHubContext<MonitorHub>();
-            context.Clients.All.newEvent(eventType, connection);
+            //var context = GlobalHost.ConnectionManager.GetHubContext<MonitorHub>();
+            //context.Clients.All.newEvent(eventType, connection);
         }
     }
 

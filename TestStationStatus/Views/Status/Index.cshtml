@@ -19,7 +19,7 @@
         $(function () {
             $.connection.hub.logging = true;
 
-            chat = $.connection.yourAppHub;
+            chat = $.connection.monitorHub;
             chat.client.refreshPage = onNewMessage;
 
             $.connection.hub.start({ transport: 'longPolling' });

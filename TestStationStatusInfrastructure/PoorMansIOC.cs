@@ -6,6 +6,7 @@ namespace TestStationStatusInfrastructure
     {
         private static LocalTestDataService _SingleInstanceLocalData;
         private static ServerDataService _SingleInstanceServerData;
+        private static RefreshClientService _SingleInstanceRefreshData;
 
         public static LocalTestDataService GetLocalTestDataService()
         {
@@ -24,6 +25,16 @@ namespace TestStationStatusInfrastructure
             }
             return _SingleInstanceServerData;
         }
+
+        public static RefreshClientService GetRefreshDataService()
+        {
+            if (_SingleInstanceServerData == null)
+            {
+                _SingleInstanceRefreshData = new RefreshClientService();
+            }
+            return _SingleInstanceRefreshData;
+        }
+        
 
     }
 }
