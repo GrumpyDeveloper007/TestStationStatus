@@ -24,6 +24,17 @@ namespace TestStationStatus.Controllers
             _dataUpdatedClient = PoorMansIOC.GetRefreshDataService();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                //System.IO.File.AppendAllText(@"C:\kf2_ats\weblog.txt", DateTime.Now.ToString("hh:mm:ss.fff") + "controller destroyed\r\n");
+                //_dataUpdatedClient.Running = false;
+            }
+
+            base.Dispose(disposing);
+        }
+
         public ActionResult Cancel()
         {
             _localDataService.KillCurrentTestCase();

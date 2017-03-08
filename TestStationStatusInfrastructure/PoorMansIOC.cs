@@ -28,7 +28,7 @@ namespace TestStationStatusInfrastructure
 
         public static RefreshClientService GetRefreshDataService()
         {
-            if (_SingleInstanceServerData == null)
+            if (_SingleInstanceRefreshData == null)
             {
                 _SingleInstanceRefreshData = new RefreshClientService();
             }
