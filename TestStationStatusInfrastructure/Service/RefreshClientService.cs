@@ -30,7 +30,7 @@ namespace TestStationStatusInfrastructure.Service
                 {
                     try
                     {
-                        System.IO.File.AppendAllText(@"C:\kf2_ats\weblog.txt", DateTime.Now.ToString("hh:mm:ss.fff") + "refresh page\r\n");
+                       // System.IO.File.AppendAllText(@"C:\kf2_ats\weblog.txt", DateTime.Now.ToString("hh:mm:ss.fff") + "refresh page\r\n");
                         logged = true;
                     }
                     catch (Exception ex)

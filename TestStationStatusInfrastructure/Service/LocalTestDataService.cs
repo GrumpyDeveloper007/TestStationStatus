@@ -9,9 +9,11 @@ namespace TestStationStatusInfrastructure.Service
 {
     public class LocalTestDataService
     {
+        public string WorkingFolder = @"C:\kf2_ats";
+
         public void KillCurrentTestCase()
         {
-            System.IO.File.WriteAllText(@"C:\kf2_ats\e420\KillSwitch.txt", "Stop");
+            System.IO.File.WriteAllText(WorkingFolder+ @"\e420\KillSwitch.txt", "Stop");
         }
 
         public StatusModel GetModelFromLocalFiles()
@@ -24,11 +26,11 @@ namespace TestStationStatusInfrastructure.Service
                 model.ResultsFile.Clear();
                 model.ApplicationStatus = "";
 
-                var lines = System.IO.File.ReadAllLines(@"C:\kf2_ats\e420\ApplicationSummary.txt");
+                var lines = System.IO.File.ReadAllLines(WorkingFolder+@"\e420\ApplicationSummary.txt");
                 model.StatusFile.AddRange(lines);
-                if (System.IO.File.Exists(@"C:\kf2_ats\e420\ApplicationStatus.txt"))
+                if (System.IO.File.Exists(WorkingFolder+@"\e420\ApplicationStatus.txt"))
                 {
-                    var status = System.IO.File.ReadAllLines(@"C:\kf2_ats\e420\ApplicationStatus.txt");
+                    var status = System.IO.File.ReadAllLines(WorkingFolder+@"\e420\ApplicationStatus.txt");
                     model.ApplicationStatus = status[0];
                     if (status.Count() > 1)
                     {
@@ -44,14 +46,14 @@ namespace TestStationStatusInfrastructure.Service
                     }
                 }
 
-                if (System.IO.File.Exists(@"C:\kf2_ats\e420\ApplicationResults.txt"))
+                if (System.IO.File.Exists(WorkingFolder+@"\e420\ApplicationResults.txt"))
                 {
-                    lines = System.IO.File.ReadAllLines(@"C:\kf2_ats\e420\ApplicationResults.txt");
+                    lines = System.IO.File.ReadAllLines(WorkingFolder+@"\e420\ApplicationResults.txt");
                     model.ResultsFile.AddRange(lines);
                 }
 
-                var queueItems = System.IO.Directory.GetFiles(@"C:\kf2_ats\queue\", "*.TST");
-                var completedItems = System.IO.Directory.GetFiles(@"C:\kf2_ats\queue\", "*.LST");
+                var queueItems = System.IO.Directory.GetFiles(WorkingFolder+@"\queue\", "*.TST");
+                var completedItems = System.IO.Directory.GetFiles(WorkingFolder+@"\queue\", "*.LST");
                 model.QueueItems.Clear();
                 foreach (string item in queueItems)
                 {
@@ -72,7 +74,7 @@ namespace TestStationStatusInfrastructure.Service
                     }
                 }
 
-                var monitorFiles = System.IO.Directory.GetFiles(@"C:\KF2_ATS\E420MonitorTestPlan", "*.TST");
+                var monitorFiles = System.IO.Directory.GetFiles(WorkingFolder+@"\E420MonitorTestPlan", "*.TST");
                 model.MonitorFiles = monitorFiles.ToList();
 
             }

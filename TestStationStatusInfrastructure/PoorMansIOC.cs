@@ -5,6 +5,7 @@ namespace TestStationStatusInfrastructure
     public static class PoorMansIOC
     {
         private static LocalTestDataService _SingleInstanceLocalData;
+        private static LocalTestDataService _SingleInstanceLocalData2;
         private static ServerDataService _SingleInstanceServerData;
         private static RefreshClientService _SingleInstanceRefreshData;
 
@@ -15,6 +16,15 @@ namespace TestStationStatusInfrastructure
                 _SingleInstanceLocalData = new LocalTestDataService();
             }
             return _SingleInstanceLocalData;
+        }
+
+        public static LocalTestDataService GetLocalTestDataService2()
+        {
+            if (_SingleInstanceLocalData2 == null)
+            {
+                _SingleInstanceLocalData2 = new LocalTestDataService();
+            }
+            return _SingleInstanceLocalData2;
         }
 
         public static ServerDataService GetServerDataService()
