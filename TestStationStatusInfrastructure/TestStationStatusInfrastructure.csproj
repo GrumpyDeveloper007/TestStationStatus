@@ -67,6 +67,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -79,6 +80,7 @@
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\MonitorHub.cs" />
     <Compile Include="PoorMansIOC.cs" />
+    <Compile Include="Service\IpAddressService.cs" />
     <Compile Include="Service\LocalTestDataService.cs" />
     <Compile Include="Service\RefreshClientService.cs" />
     <Compile Include="Service\ServerDataService.cs" />

@@ -99,34 +99,48 @@
         ViewBag.Title = "Index";
     }
 
-    <h2>StatusView</h2>
+    <h2>StatusView - @Environment.MachineName</h2>
 
     <p>
         <input type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Status")'" />
     </p>
-    <tr>
-        <th></th>
-    </tr>
 
-    <div class="editor-label">
-        @Html.LabelFor(model => model.ApplicationStatus)
-        @Model.ApplicationStatus
-    </div>
+    @using (Html.BeginForm("Upload", "Status", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <p>
+            @Html.TextBoxFor(m => m.file, new { type = "file", name = "file", multiple = "multiple" })
+            <input type="submit" value="OK" />
+        </p>
+    }
 
-    <div class="editor-label">
-        @Html.LabelFor(model => model.TestScript)
-        @Model.TestScript
-    </div>
-
-    <div class="editor-label">
-        @Html.LabelFor(model => model.LastUpdateTime)
-        @Model.LastUpdateTimeString
-    </div>
-
-    <table>
         <tr>
-            <td>
-                <p>Actions</p>
+            <th></th>
+        </tr>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ApplicationStatus)
+            @Model.ApplicationStatus
+        </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.TestPlanActive)
+        @Model.TestPlanActive
+    </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TestScript)
+            @Model.TestScript
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LastUpdateTime)
+            @Model.LastUpdateTimeString
+        </div>
+
+        <table>
+            <tr>
+                <td>
+<p>Actions</p>
                 <table class="tg">
 
                     @foreach (var item in Model.StatusFile)

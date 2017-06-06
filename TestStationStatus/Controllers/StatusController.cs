@@ -3,6 +3,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using TestStationStatus.Models;
@@ -38,6 +39,18 @@ namespace TestStationStatus.Controllers
         public ActionResult Cancel()
         {
             _localDataService.KillCurrentTestCase();
+            return Redirect(Request.UrlReferrer.ToString());
+        }
+
+        [HttpPost]
+        public ActionResult Upload(StatusViewModel model, HttpPostedFileBase[] file)
+        {
+            string IP = Request.UserHostName;
+            // Verify that the user selected a file
+            if (file != null && file[0]!=null && file[0].ContentLength > 0)
+            {
+                _localDataService.UploadFile(file,IP);
+            }
             return Redirect(Request.UrlReferrer.ToString());
         }
 

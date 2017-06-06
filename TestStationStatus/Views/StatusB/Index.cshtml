@@ -99,11 +99,21 @@
         ViewBag.Title = "Index";
     }
 
-    <h2>StatusView</h2>
+    <h2>StatusView - @Environment.MachineName B</h2>
 
     <p>
-        <input type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Status")'" />
+        <input type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel","StatusB")'" />
     </p>
+
+    @using (Html.BeginForm("Upload", "StatusB", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <p>
+            @Html.TextBoxFor(m => m.file, new { type = "file", name = "file", multiple = "multiple" })
+            <input type="submit" value="OK"/>
+        </p>
+    }
+
+
     <tr>
         <th></th>
     </tr>
@@ -112,6 +122,12 @@
         @Html.LabelFor(model => model.ApplicationStatus)
         @Model.ApplicationStatus
     </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.TestPlanActive)
+        @Model.TestPlanActive
+    </div>
+
 
     <div class="editor-label">
         @Html.LabelFor(model => model.TestScript)

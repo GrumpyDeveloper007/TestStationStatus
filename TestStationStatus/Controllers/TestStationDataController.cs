@@ -19,19 +19,19 @@ namespace TestStationStatus.Controllers
 
 
 
-        // GET: api/API
+        // GET: api/TestStationData
         public IEnumerable<StatusUpdate> Get()
         {
             return _ServerDataService.GetCurrentStatusUpdate();
         }
 
-        // GET: api/API/5
+        // GET: api/TestStationData/5
         public StatusUpdate Get(int id)
         {
             return null;
         }
 
-        // POST: api/API
+        // POST: api/TestStationData
         public IHttpActionResult Post([FromBody]StatusUpdate value)
         {
             string errorMessage;
@@ -46,13 +46,13 @@ namespace TestStationStatus.Controllers
             }
         }
 
-        // PUT: api/API/5
+        // PUT: api/TestStationData/5
         public void Put(int id, [FromBody]StatusUpdate value)
         {
 
         }
 
-        // DELETE: api/API/5
+        // DELETE: api/TestStationData/5
         public void Delete(int id)
         {
         }

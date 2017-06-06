@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
 
@@ -11,11 +12,14 @@ namespace TestStationStatus.Models
         public string ApplicationStatus { get; set; }
         public string LastUpdateTime { get; set; }
         public string TestScript { get; set; }
+        [DisplayName("Overnight test plan active")]
+        public string TestPlanActive { get; set; }
         public string LogFile { get; set; }
         public List<string> StatusFile;
         public List<string> ResultsFile;
         public List<string> QueueItems;
         public List<string> MonitorFiles;
+        public HttpPostedFileBase file;
 
         public StatusViewModel()
         {
@@ -23,6 +27,7 @@ namespace TestStationStatus.Models
             ResultsFile = new List<string>();
             QueueItems = new List<string>();
             MonitorFiles = new List<string>();
+            
         }
 
         public StatusViewModel(StatusModel model)
@@ -36,6 +41,7 @@ namespace TestStationStatus.Models
             ResultsFile = model.ResultsFile;
             QueueItems = model.QueueItems;
             MonitorFiles = model.MonitorFiles;
+            TestPlanActive = model.TestPlanActive;
         }
 
         public string LastUpdateTimeString

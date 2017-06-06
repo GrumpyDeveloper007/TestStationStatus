@@ -11,6 +11,7 @@ namespace TestStationStatus.Models
         public string ApplicationStatus { get; set; }
         public string LastUpdateTime { get; set; }
         public string TestScript { get; set; }
+        public string TestPlanActive { get; set; }
         public string LogFile { get; set; }
         public List<string> StatusFile;
         public List<string> ResultsFile;
