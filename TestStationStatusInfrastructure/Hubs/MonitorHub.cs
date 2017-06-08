@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TestStationStatusInfrastructure.Hubs
 {
-    public class MonitorHub : Hub
+    public class MonitorHub : Hub, IMonitorHub
     {
         public void refreshPage()
         {

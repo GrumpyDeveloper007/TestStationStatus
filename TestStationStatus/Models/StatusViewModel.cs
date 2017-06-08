@@ -11,6 +11,7 @@ namespace TestStationStatus.Models
         public string Name { get; set; }
         public string ApplicationStatus { get; set; }
         public string LastUpdateTime { get; set; }
+        public string WebQueryTime { get; set; }
         public string TestScript { get; set; }
         [DisplayName("Overnight test plan active")]
         public string TestPlanActive { get; set; }
@@ -42,6 +43,7 @@ namespace TestStationStatus.Models
             QueueItems = model.QueueItems;
             MonitorFiles = model.MonitorFiles;
             TestPlanActive = model.TestPlanActive;
+            WebQueryTime = model.WebQueryTime;
         }
 
         public string LastUpdateTimeString
@@ -49,8 +51,8 @@ namespace TestStationStatus.Models
             get
             {
                 if (string.IsNullOrWhiteSpace (LastUpdateTime ))
-                    return "";
-                return TimeSpan.FromSeconds(double.Parse(LastUpdateTime)).ToString();
+                    return ":" + WebQueryTime;
+                return TimeSpan.FromSeconds(double.Parse(LastUpdateTime)).ToString() + " : " + WebQueryTime;
             }
         }
 

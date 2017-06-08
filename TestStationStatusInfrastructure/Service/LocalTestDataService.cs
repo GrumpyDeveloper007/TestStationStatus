@@ -12,6 +12,7 @@ namespace TestStationStatusInfrastructure.Service
     public class LocalTestDataService
     {
         public string WorkingFolder = @"C:\kf2_ats";
+        StatusModel _CurrentModel = new StatusModel();
 
         public void KillCurrentTestCase()
         {
@@ -20,10 +21,30 @@ namespace TestStationStatusInfrastructure.Service
 
         public void UploadFile(HttpPostedFileBase[] files, string iPAddress)
         {
-            string computerName = IpAddressService.DetermineCompName(iPAddress);
+            string computerName = IpAddressService.DetermineComputerName(iPAddress);
 
             foreach (HttpPostedFileBase file in files)
             {
+                // extract only the file name
+                var fileName = Path.GetFileName(file.FileName);
+                // store the file 
+                var path = Path.Combine(WorkingFolder + @"\E420MonitorTestPlan", fileName);
+                file.SaveAs(path);
+
+                string[] lines = File.ReadAllLines(path);
+                lines[0] = "{<TestMeta><ComputerName>" + computerName + "</ComputerName></TestMeta>}" + lines[0];
+
+                File.WriteAllLines(path, lines);
+            }
+        }
+
+        public void UploadFile(HttpFileCollectionBase files, string iPAddress)
+        {
+            string computerName = IpAddressService.DetermineComputerName(iPAddress);
+
+            for (int i = 0; i < files.Count; i++)
+            {
+                HttpPostedFileBase file = files[i];
                 // extract only the file name
                 var fileName = Path.GetFileName(file.FileName);
                 // store the file 
@@ -52,52 +73,57 @@ namespace TestStationStatusInfrastructure.Service
 
         public StatusModel GetModelFromLocalFiles()
         {
-            StatusModel model = new StatusModel();
+            return _CurrentModel;
+        }
+
+        public StatusModel UpdateModel()
+        {
             try
 
             {
-                model.StatusFile.Clear();
-                model.ResultsFile.Clear();
-                model.ApplicationStatus = "";
-                model.TestPlanActive = IsMidnightRunning().ToString();
+                _CurrentModel.StatusFile.Clear();
+                _CurrentModel.ResultsFile.Clear();
+                _CurrentModel.ApplicationStatus = "";
+                _CurrentModel.TestPlanActive = IsMidnightRunning().ToString();
+                _CurrentModel.WebQueryTime = DateTime.Now.ToLongTimeString();
 
                 if (System.IO.File.Exists(WorkingFolder + @"\e420\ApplicationSummary.txt"))
                 {
                     var lines = System.IO.File.ReadAllLines(WorkingFolder + @"\e420\ApplicationSummary.txt");
-                    model.StatusFile.AddRange(lines);
+                    _CurrentModel.StatusFile.AddRange(lines);
                 }
 
                 if (System.IO.File.Exists(WorkingFolder + @"\e420\ApplicationStatus.txt"))
                 {
                     var status = System.IO.File.ReadAllLines(WorkingFolder + @"\e420\ApplicationStatus.txt");
-                    model.ApplicationStatus = status[0];
+                    _CurrentModel.ApplicationStatus = status[0];
                     if (status.Count() > 1)
                     {
-                        model.LastUpdateTime = status[1];
+                        _CurrentModel.LastUpdateTime = status[1];
                     }
                     if (status.Count() > 2)
                     {
-                        model.TestScript = status[2];
+                        _CurrentModel.TestScript = status[2];
                     }
                     if (status.Count() > 3)
                     {
-                        model.LogFile = status[3];
+                        _CurrentModel.LogFile = status[3];
                     }
                 }
                 else
                 {
-                    model.ApplicationStatus = "No status to report, please run a test script";
+                    _CurrentModel.ApplicationStatus = "No status to report, please run a test script";
                 }
 
                 if (System.IO.File.Exists(WorkingFolder + @"\e420\ApplicationResults.txt"))
                 {
                     var lines = System.IO.File.ReadAllLines(WorkingFolder + @"\e420\ApplicationResults.txt");
-                    model.ResultsFile.AddRange(lines);
+                    _CurrentModel.ResultsFile.AddRange(lines);
                 }
 
                 var queueItems = System.IO.Directory.GetFiles(WorkingFolder + @"\queue\", "*.TST");
                 var completedItems = System.IO.Directory.GetFiles(WorkingFolder + @"\queue\", "*.LST");
-                model.QueueItems.Clear();
+                _CurrentModel.QueueItems.Clear();
                 foreach (string item in queueItems)
                 {
                     bool found = false;
@@ -113,19 +139,19 @@ namespace TestStationStatusInfrastructure.Service
 
                     if (found == false)
                     {
-                        model.QueueItems.Add(fileName);
+                        _CurrentModel.QueueItems.Add(fileName);
                     }
                 }
 
                 var monitorFiles = System.IO.Directory.GetFiles(WorkingFolder + @"\E420MonitorTestPlan", "*.TST");
-                model.MonitorFiles = monitorFiles.ToList();
+                _CurrentModel.MonitorFiles = monitorFiles.ToList();
 
             }
             catch (Exception ex)
             {
-                model.ApplicationStatus = "File locked";
+                _CurrentModel.ApplicationStatus = "File locked";
             }
-            return model;
+            return _CurrentModel;
         }
 
     }

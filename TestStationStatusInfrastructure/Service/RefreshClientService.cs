@@ -11,6 +11,9 @@ namespace TestStationStatusInfrastructure.Service
 {
     public class RefreshClientService
     {
+        LocalTestDataService _localDataServiceB;
+        LocalTestDataService _localDataService;
+
 
         public System.Threading.Thread BackgroundWorker { get; set; }
 
@@ -21,8 +24,11 @@ namespace TestStationStatusInfrastructure.Service
 
             while (Running == true)
             {
-                var context2 = GlobalHost.ConnectionManager.GetHubContext<MonitorHub>();
-                IHubConnectionContext<dynamic> Clients = context2.Clients;
+                _localDataService.UpdateModel();
+                _localDataServiceB.UpdateModel();
+
+                var context2 = GlobalHost.ConnectionManager.GetHubContext<MonitorHub, IMonitorHub>();
+                var Clients = context2.Clients;
                 Clients.All.refreshPage();
 
                 bool logged = false;
@@ -45,6 +51,12 @@ namespace TestStationStatusInfrastructure.Service
         {
             if (Running == false)
             {
+                _localDataService = PoorMansIOC.GetLocalTestDataService(); // TODO: replace with IOC container
+
+                _localDataServiceB = PoorMansIOC.GetLocalTestDataService2(); // TODO: replace with IOC container
+                _localDataServiceB.WorkingFolder = @"C:\kf2_atsB";
+
+
                 //System.IO.File.AppendAllText(@"C:\kf2_ats\weblog.txt", DateTime.Now.ToString("hh:mm:ss.fff") + "new instance\r\n");
                 BackgroundWorker = new System.Threading.Thread(new System.Threading.ThreadStart(thread));
                 Running = true;

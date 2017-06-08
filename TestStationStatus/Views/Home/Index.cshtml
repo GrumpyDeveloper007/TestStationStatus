@@ -2,6 +2,56 @@
     ViewBag.Title = "Home Page";
 }
 
+@model TestStationStatus.Models.HomeViewModel
+
+
+@section scripts{
+    @*/* load your scripts here. You can exclude jQuery,
+        coz it's already in the template */ *@
+    <script src="~/Scripts/jquery-1.10.2.js" type="text/javascript"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.1.js"></script>
+    <script src="~/signalr/hubs"></script>
+
+
+    <!--Add script to update the page and send messages.-->
+    <script type="text/javascript">
+        var chat;
+
+        $(function () {
+            $.connection.hub.logging = true;
+
+            chat = $.connection.monitorHub;
+            chat.client.refreshPage = onNewMessage;
+
+            $.connection.hub.start({ transport: 'longPolling' });
+        });
+
+        function onNewMessage(message) {
+            // ... todo: validation !!!! :)
+            //alert("Updated: ");
+            $.ajax({
+                url: '',
+                success: function (data) {
+                    //var iframe = document.getElementById('status1');
+                    //iframe.src = iframe.src;
+                    //var iframe = document.getElementById('status2');
+                    //iframe.src = iframe.src;
+
+                }
+            });
+        };
+
+
+        $.connection.hub.error(function (err) {
+            alert("An error occured: " + err);
+        });
+    </script>
+}
+
+
+
+
 <style type="text/css">
 .btn-test {
   color: #333333;
@@ -13,17 +63,11 @@
 }
 </style>
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
-
-<img src="~/img/maxresdefault.jpg" width="800" height="200" />
+<img src="~/img/maxresdefault.jpg" width="800" height="100" />
 
 <div class="row">
     <div class="col-md-4">
-        <h2>Status Page</h2>
+        <h2>Status Page @Environment.MachineName</h2>
         <p>
         </p>
         <p><a class="btn btn-test"  href="~/status" >Status Page</a></p>
@@ -34,4 +78,26 @@
         <p></p>
         <p><a class="btn btn-default" href="~/Views/Status/Index.cshtml">Test link</a></p>
     </div>
-</div>
+    <div class="col-md-4">
+        <h2>Test Case queueing</h2>
+        <p></p>
+        @using (Html.BeginForm("Upload2", "Status", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <p>
+                @Html.TextBoxFor(m => m.filesA, new { type = "file", name = "file", multiple = "multiple" })
+                <input type="submit" value="Queue A" />
+            </p>
+        }
+        @using (Html.BeginForm("Upload2", "StatusB", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <p>
+                @Html.TextBoxFor(m => m.filesB, new { type = "file", name = "file", multiple = "multiple" })
+                <input type="submit" value="Queue B" />
+            </p>
+        }
+    </div>
+
+       <!-- <iframe id="status1" width="800" height="800" src="~/status/Status" name="targetframe" allowTransparency="true" scrolling="no" frameborder="0"></iframe>
+        <iframe id="status2" width="800" height="800" src="~/statusB/status" name="targetframe" allowTransparency="true" scrolling="no" frameborder="0"></iframe>
+           -->
+

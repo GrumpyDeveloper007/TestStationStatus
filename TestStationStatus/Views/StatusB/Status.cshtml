@@ -1,18 +1,24 @@
 ﻿<html>
 <head>
+    @{
+        Layout = "";
+    }
+
+
+
     @model TestStationStatus.Models.StatusViewModel
 
     @section scripts{
         @*/* load your scripts here. You can exclude jQuery,
             coz it's already in the template */ *@
-    <script src="~/Scripts/jquery-1.10.2.js" type="text/javascript"></script>
+        <script src="~/Scripts/jquery-1.10.2.js" type="text/javascript"></script>
         <script src="~/Scripts/bootstrap.js"></script>
         <script src="~/Scripts/jquery.signalR-2.2.1.js"></script>
         <script src="~/signalr/hubs"></script>
 
 
-    <!--Add script to update the page and send messages.-->
-    <script type="text/javascript">
+        <!--Add script to update the page and send messages.-->
+        <script type="text/javascript">
         var chat;
 
         $(function () {
@@ -40,7 +46,7 @@
         $.connection.hub.error(function (err) {
             alert("An error occured: " + err);
         });
-    </script>
+        </script>
     }
 
 
@@ -92,73 +98,50 @@
             }
     </style>
 
+    <!--<meta http-equiv="refresh" content="10">-->
     @{
         ViewBag.Title = "Index";
     }
 
-    <h2>StatusView - @Environment.MachineName</h2>
+    <h2>StatusView - @Environment.MachineName B</h2>
 
     <p>
-        <input type="button" title="Cancel current test case" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Status")'" />
+        <input type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel","StatusB")'" />
     </p>
 
-        <tr>
-            <th></th>
-        </tr>
+    @using (Html.BeginForm("Upload", "StatusB", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <p>
+            @Html.TextBoxFor(m => m.file, new { type = "file", name = "file", multiple = "multiple" })
+            <input type="submit" value="OK" />
+        </p>
+    }
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.ApplicationStatus)
-            @Model.ApplicationStatus
-        </div>
+
+    <tr>
+        <th></th>
+    </tr>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.ApplicationStatus)
+        @Model.ApplicationStatus
+    </div>
 
     <div class="editor-label">
         @Html.LabelFor(model => model.TestPlanActive)
         @Model.TestPlanActive
     </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.TestScript)
-            @Model.TestScript
-        </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.LastUpdateTime)
-            @Model.LastUpdateTimeString
-        </div>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.TestScript)
+        @Model.TestScript
+    </div>
 
-        <table>
-            <tr>
-                <td>
-<p>Actions</p>
-                <table class="tg">
-
-                    @foreach (var item in Model.StatusFile)
-            {
-                        <tr>
-                            <td>
-                                @item
-                            </td>
-                        </tr>
-                    }
-                </table>
-            </td>
-            <td>
-                <p>Results </p>
-                <table class="tg">
-
-                    @foreach (var item in Model.ResultsFile)
-            {
-                        <tr>
-                            <td class="tg-yw4l">
-                                @item
-                            </td>
-                        </tr>
-                    }
-                </table>
-            </td>
-        </tr>
-    </table>
-
+    <div class="editor-label">
+        @Html.LabelFor(model => model.LastUpdateTime)
+        @Model.LastUpdateTimeString
+    </div>
 
     <p>Queue</p>
     <table class="tg">

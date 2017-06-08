@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="DbSetExtension.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
+    <Compile Include="Hubs\IMonitorHub.cs" />
     <Compile Include="Hubs\MonitorHub.cs" />
     <Compile Include="PoorMansIOC.cs" />
     <Compile Include="Service\IpAddressService.cs" />

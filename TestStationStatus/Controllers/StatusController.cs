@@ -54,6 +54,19 @@ namespace TestStationStatus.Controllers
             return Redirect(Request.UrlReferrer.ToString());
         }
 
+        [HttpPost]
+        public ActionResult Upload2()
+        {
+            string IP = Request.UserHostName;
+            var file = Request.Files;
+            // Verify that the user selected a file
+            if (file != null && file[0] != null && file[0].ContentLength > 0)
+            {
+                _localDataService.UploadFile(file, IP);
+            }
+            return Redirect(Request.UrlReferrer.ToString());
+        }
+
         // GET: Status
         public ActionResult Index()
         {
@@ -73,5 +86,25 @@ namespace TestStationStatus.Controllers
 
             return View(_model);
         }
+
+        public ActionResult Status()
+        {
+            if (_model == null)
+            {
+                _model = new StatusViewModel();
+            }
+
+            if (_dataUpdatedClient.BackgroundWorker == null)
+            {
+                _dataUpdatedClient.StartService();
+            }
+
+
+            var model = _localDataService.GetModelFromLocalFiles();
+            _model = new StatusViewModel(model);
+
+            return View(_model);
+        }
+
     }
 }

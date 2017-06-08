@@ -31,9 +31,8 @@
             $.ajax({
                 url: '',
                 success: function (data) {
+                    //$("body").html();
                     window.location.reload(); // This is not jQuery but simple plain ol' JS
-                    if (data == "refresh") {
-                    }
                 }
             });
         };
@@ -104,15 +103,6 @@
     <p>
         <input type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel","StatusB")'" />
     </p>
-
-    @using (Html.BeginForm("Upload", "StatusB", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        <p>
-            @Html.TextBoxFor(m => m.file, new { type = "file", name = "file", multiple = "multiple" })
-            <input type="submit" value="OK"/>
-        </p>
-    }
-
 
     <tr>
         <th></th>
