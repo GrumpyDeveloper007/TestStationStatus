@@ -8,5 +8,7 @@ namespace TestStationStatusInfrastructure.Hubs
         Task OnDisconnected(bool stopCalled);
         Task OnReconnected();
         void refreshPage();
+        void statusAUpdated(string status);
+        void statusBUpdated(string status);
     }
 }

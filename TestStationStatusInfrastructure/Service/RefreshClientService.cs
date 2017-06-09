@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestStationStatus.Models;
 using TestStationStatusInfrastructure.Hubs;
 
 namespace TestStationStatusInfrastructure.Service
@@ -13,6 +14,9 @@ namespace TestStationStatusInfrastructure.Service
     {
         LocalTestDataService _localDataServiceB;
         LocalTestDataService _localDataService;
+
+        StatusModel _modelA = new StatusModel();
+        StatusModel _modelB = new StatusModel();
 
 
         public System.Threading.Thread BackgroundWorker { get; set; }
@@ -24,19 +28,34 @@ namespace TestStationStatusInfrastructure.Service
 
             while (Running == true)
             {
-                _localDataService.UpdateModel();
-                _localDataServiceB.UpdateModel();
+                var modelA = _localDataService.UpdateModel();
+                var modelB = _localDataServiceB.UpdateModel();
+
 
                 var context2 = GlobalHost.ConnectionManager.GetHubContext<MonitorHub, IMonitorHub>();
                 var Clients = context2.Clients;
                 Clients.All.refreshPage();
+
+
+                //if (modelA.ApplicationStatus != _modelA.ApplicationStatus)
+                {
+                    Clients.All.statusAUpdated(modelA.ApplicationStatus + ", queue : " + (modelA.MonitorFiles.Count() + modelA.QueueItems.Count()));
+                }
+
+                //if (modelB.ApplicationStatus != _modelB.ApplicationStatus)
+                {
+                    Clients.All.statusBUpdated(modelB.ApplicationStatus + ", queue : " + (modelB.MonitorFiles.Count() + modelB.QueueItems.Count()));
+                }
+                _modelA = modelA;
+                _modelB = modelB;
+
 
                 bool logged = false;
                 while (logged == false)
                 {
                     try
                     {
-                       // System.IO.File.AppendAllText(@"C:\kf2_ats\weblog.txt", DateTime.Now.ToString("hh:mm:ss.fff") + "refresh page\r\n");
+                        // System.IO.File.AppendAllText(@"C:\kf2_ats\weblog.txt", DateTime.Now.ToString("hh:mm:ss.fff") + "refresh page\r\n");
                         logged = true;
                     }
                     catch (Exception ex)

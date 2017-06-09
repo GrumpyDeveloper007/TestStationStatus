@@ -15,6 +15,15 @@ namespace TestStationStatusInfrastructure.Hubs
             Clients.All.refreshPage();
         }
 
+        public void statusAUpdated(string status)
+        {
+            Clients.All.statusAUpdated(status);
+        }
+
+        public void statusBUpdated(string status)
+        {
+            Clients.All.statusBUpdated(status);
+        }
 
         public override Task OnConnected()
         {

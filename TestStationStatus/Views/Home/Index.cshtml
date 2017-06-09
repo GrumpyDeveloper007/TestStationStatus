@@ -22,29 +22,22 @@
             $.connection.hub.logging = true;
 
             chat = $.connection.monitorHub;
-            chat.client.refreshPage = onNewMessage;
+            chat.client.statusAUpdated = statusAUpdated;
+            chat.client.statusBUpdated = statusBUpdated;
 
             $.connection.hub.start({ transport: 'longPolling' });
         });
 
-        function onNewMessage(message) {
-            // ... todo: validation !!!! :)
-            //alert("Updated: ");
-            $.ajax({
-                url: '',
-                success: function (data) {
-                    //var iframe = document.getElementById('status1');
-                    //iframe.src = iframe.src;
-                    //var iframe = document.getElementById('status2');
-                    //iframe.src = iframe.src;
-
-                }
-            });
+        function statusAUpdated(message) {
+            $('#statusA').text(message);
         };
 
+        function statusBUpdated(message) {
+            $('#statusB').text(message);
+        };
 
         $.connection.hub.error(function (err) {
-            alert("An error occured: " + err);
+           // alert("An error occured: " + err);
         });
     </script>
 }
@@ -83,6 +76,7 @@
         <p></p>
         @using (Html.BeginForm("Upload2", "Status", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
+            <p id="statusA">*Loading*</p>
             <p>
                 @Html.TextBoxFor(m => m.filesA, new { type = "file", name = "file", multiple = "multiple" })
                 <input type="submit" value="Queue A" />
@@ -90,6 +84,7 @@
         }
         @using (Html.BeginForm("Upload2", "StatusB", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
+            <p id="statusB">*Loading*</p>
             <p>
                 @Html.TextBoxFor(m => m.filesB, new { type = "file", name = "file", multiple = "multiple" })
                 <input type="submit" value="Queue B" />
