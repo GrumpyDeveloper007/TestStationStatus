@@ -13,13 +13,13 @@
 
     <!--Add script to update the page and send messages.-->
     <script type="text/javascript">
-        var chat;
+        var monitor;
 
         $(function () {
             $.connection.hub.logging = true;
 
-            chat = $.connection.monitorHub;
-            chat.client.refreshPage = onNewMessage;
+            monitor = $.connection.monitorHub;
+            monitor.client.refreshPage = onNewMessage;
 
             $.connection.hub.start({ transport: 'longPolling' });
         });

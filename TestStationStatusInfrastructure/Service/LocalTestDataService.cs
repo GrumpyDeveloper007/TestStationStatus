@@ -9,6 +9,12 @@ using TestStationStatus.Models;
 
 namespace TestStationStatusInfrastructure.Service
 {
+    /// <summary>
+    /// Communicates with another application using files. 
+    /// This could be replaced with a rest API in the future, however for now I need to support the application
+    /// while making the absolute minimum changes to the external application and the simplest way to achieve 
+    /// this is to simply write to a few files.
+    /// </summary>
     public class LocalTestDataService
     {
         public string WorkingFolder = @"C:\kf2_ats";
@@ -99,15 +105,18 @@ namespace TestStationStatusInfrastructure.Service
                     _CurrentModel.ApplicationStatus = status[0];
                     if (status.Count() > 1)
                     {
-                        _CurrentModel.LastUpdateTime = status[1];
+                        if (!string.IsNullOrWhiteSpace(status[1]))
+                            _CurrentModel.LastUpdateTime = status[1];
                     }
                     if (status.Count() > 2)
                     {
-                        _CurrentModel.TestScript = status[2];
+                        if (!string.IsNullOrWhiteSpace(status[2]))
+                            _CurrentModel.TestScript = Path.GetFileName(status[2]);
                     }
                     if (status.Count() > 3)
                     {
-                        _CurrentModel.LogFile = status[3];
+                        if (!string.IsNullOrWhiteSpace(status[3]))
+                            _CurrentModel.LogFile = status[3];
                     }
                 }
                 else
@@ -139,12 +148,19 @@ namespace TestStationStatusInfrastructure.Service
 
                     if (found == false)
                     {
-                        _CurrentModel.QueueItems.Add(fileName);
+
+                        _CurrentModel.QueueItems.Add(Path.GetFileName(fileName));
                     }
                 }
 
                 var monitorFiles = System.IO.Directory.GetFiles(WorkingFolder + @"\E420MonitorTestPlan", "*.TST");
-                _CurrentModel.MonitorFiles = monitorFiles.ToList();
+                _CurrentModel.MonitorFiles = new List<string>();
+                foreach (var file in monitorFiles)
+                {
+                    _CurrentModel.MonitorFiles.Add(Path.GetFileName(file));
+                }
+                _CurrentModel.QueueDuration = 0;
+                _CurrentModel.MonitorDuration = 0;
 
             }
             catch (Exception ex)

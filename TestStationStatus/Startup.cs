@@ -10,9 +10,12 @@ namespace TestStationStatus
     {
         public void Configuration(IAppBuilder app)
         {
+            // Create instance of DB
+            using (var ctx = new TestStationContext())
+            {
+                ctx.SaveChanges();
+            }
             app.MapSignalR();
-            test database = new test();
-            database.Test();
             ConfigureAuth(app);
         }
     }

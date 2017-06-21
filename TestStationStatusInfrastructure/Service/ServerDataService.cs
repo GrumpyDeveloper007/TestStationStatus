@@ -8,6 +8,9 @@ using TestStationStatusDomain.Entities;
 
 namespace TestStationStatusInfrastructure.Service
 {
+    /// <summary>
+    /// An POC API created to replace the file based communication
+    /// </summary>
     public class ServerDataService
     {
         public IEnumerable<StatusUpdate> GetCurrentStatusUpdate()
@@ -23,6 +26,77 @@ namespace TestStationStatusInfrastructure.Service
             catch (Exception ex)
             {
                 return new StatusUpdate[] { new StatusUpdate { Status = ex.Message } };
+            }
+        }
+
+        public double GetDurationOfTestCase(string fileName)
+        {
+            try
+            {
+                using (var ctx = new TestStationContext())
+                {
+                    var existingRecord = ctx.TestDuration.Where(x => x.TestCaseName == fileName).FirstOrDefault();
+
+                    if (existingRecord == null)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return existingRecord.DurationSeconds;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+
+        public string SaveDuration(TestDuration value)
+        {
+            try
+            {
+                using (var ctx = new TestStationContext())
+                {
+                    var existingRecord = ctx.TestDuration.Where(x => x.TestStationName == value.TestStationName && x.TestCaseName ==value.TestCaseName).FirstOrDefault();
+
+                    if (existingRecord == null)
+                    {
+                        ctx.TestDuration.Add(value);
+                    }
+                    else
+                    {
+                        existingRecord.DurationSeconds = value.DurationSeconds;
+                        //ctx.Entry(existingRecord).CurrentValues.SetValues(value);
+                    }
+
+                    ctx.SaveChanges();
+                    return "";
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        public string SaveCompletedTest(CompletedTest completedTest)
+        {
+            try
+            {
+                using (var ctx = new TestStationContext())
+                {
+                    ctx.CompletedTests.Add(completedTest);
+                    ctx.SaveChanges();
+                    return "";
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
             }
         }
 

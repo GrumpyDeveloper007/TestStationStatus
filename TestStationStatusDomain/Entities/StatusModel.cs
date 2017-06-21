@@ -20,7 +20,9 @@ namespace TestStationStatus.Models
         public List<string> ResultsFile;
         public List<string> QueueItems;
         public List<string> MonitorFiles;
-        //public HttpPostedFileBase[] file;
+        public double QueueDuration;
+        public double MonitorDuration;
+        public double TestScriptLastDuration;
 
         public StatusModel()
         {
@@ -36,7 +38,31 @@ namespace TestStationStatus.Models
             {
                 if (string.IsNullOrWhiteSpace(LastUpdateTime))
                     return ":" + WebQueryTime;
-                return TimeSpan.FromSeconds(double.Parse(LastUpdateTime)).ToString() + " : " + WebQueryTime;
+                return TimeSpan.FromSeconds(double.Parse(LastUpdateTime)).ToString() +" (" + TimeSpan.FromSeconds(TestScriptLastDuration).ToString() + ")" + " : " + WebQueryTime;
+            }
+        }
+
+        public string MonitorAndQueueDurationString
+        {
+            get
+            {
+                return TimeSpan.FromSeconds(QueueDuration+MonitorDuration).ToString();
+            }
+        }
+
+        public string QueueDurationString
+        {
+            get
+            {
+                return TimeSpan.FromSeconds(QueueDuration).ToString();
+            }
+        }
+
+        public string MonitorDurationString
+        {
+            get
+            {
+                return TimeSpan.FromSeconds(MonitorDuration).ToString();
             }
         }
 

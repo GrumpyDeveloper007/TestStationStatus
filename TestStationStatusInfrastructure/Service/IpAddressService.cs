@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace TestStationStatusInfrastructure.Service
 {
+    /// <summary>
+    /// Service to translate IP to Name etc
+    /// </summary>
     public class IpAddressService
     {
         public static string DetermineComputerName(string IP)
@@ -35,7 +38,8 @@ namespace TestStationStatusInfrastructure.Service
 
                 if (GetIPHost != null)
                 {
-                    // Try the hacky way to get HostNames
+                    // Because reverse DNS doe not work for the computers based off site we try a normal DNS lookup
+                    // for each possible user
                     foreach (var ip in GetIPHost.AddressList)
                     {
                         if (ip.ToString() == IP)

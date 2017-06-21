@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace TestStationStatusInfrastructure.Hubs
 {
+    /// <summary>
+    /// Uses SignalR to refresh frequently changing items on the web page
+    /// </summary>
     public class MonitorHub : Hub, IMonitorHub
     {
         public void refreshPage()

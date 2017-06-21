@@ -15,6 +15,7 @@ namespace TestStationStatusInfrastructure
     {
         public DbSet<StatusUpdate> CurrentStationStatus { get; set; }
         public DbSet<CompletedTest> CompletedTests { get; set; }
+        public DbSet<TestDuration> TestDuration { get; set; }
 
     }
 }

@@ -13,7 +13,7 @@ namespace TestStationStatus.Models
         public string LastUpdateTime { get; set; }
         public string WebQueryTime { get; set; }
         public string TestScript { get; set; }
-        [DisplayName("Overnight test plan active")]
+        [DisplayName("Scheduled Test plan active")]
         public string TestPlanActive { get; set; }
         public string LogFile { get; set; }
         public List<string> StatusFile;
@@ -21,6 +21,7 @@ namespace TestStationStatus.Models
         public List<string> QueueItems;
         public List<string> MonitorFiles;
         public HttpPostedFileBase file;
+        public string LastUpdateTimeString { get; set; }
 
         public StatusViewModel()
         {
@@ -44,18 +45,7 @@ namespace TestStationStatus.Models
             MonitorFiles = model.MonitorFiles;
             TestPlanActive = model.TestPlanActive;
             WebQueryTime = model.WebQueryTime;
+            LastUpdateTimeString = model.LastUpdateTimeString;
         }
-
-        public string LastUpdateTimeString
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace (LastUpdateTime ))
-                    return ":" + WebQueryTime;
-                return TimeSpan.FromSeconds(double.Parse(LastUpdateTime)).ToString() + " : " + WebQueryTime;
-            }
-        }
-
-
     }
 }

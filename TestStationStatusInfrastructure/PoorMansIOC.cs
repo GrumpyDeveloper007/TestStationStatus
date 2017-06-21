@@ -2,6 +2,11 @@
 
 namespace TestStationStatusInfrastructure
 {
+    /// <summary>
+    /// My way of using the concept of IOC/dependency injection without having a IOC container.
+    /// I could just go for any standard container, but I would like to keep the project as simple 
+    /// as possible and hopefully learn something along the way
+    /// </summary>
     public static class PoorMansIOC
     {
         private static LocalTestDataService _SingleInstanceLocalData;
@@ -11,7 +16,7 @@ namespace TestStationStatusInfrastructure
 
         public static LocalTestDataService GetLocalTestDataService()
         {
-            if (_SingleInstanceLocalData==null )
+            if (_SingleInstanceLocalData == null)
             {
                 _SingleInstanceLocalData = new LocalTestDataService();
             }
@@ -44,7 +49,7 @@ namespace TestStationStatusInfrastructure
             }
             return _SingleInstanceRefreshData;
         }
-        
+
 
     }
 }
