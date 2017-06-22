@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace TestStationStatusInfrastructure.Service
     /// </summary>
     public class ServerDataService
     {
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
+
         public IEnumerable<StatusUpdate> GetCurrentStatusUpdate()
         {
             try
@@ -25,6 +28,7 @@ namespace TestStationStatusInfrastructure.Service
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, ex);
                 return new StatusUpdate[] { new StatusUpdate { Status = ex.Message } };
             }
         }
@@ -50,6 +54,7 @@ namespace TestStationStatusInfrastructure.Service
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, ex);
                 return 0;
             }
         }
@@ -79,6 +84,7 @@ namespace TestStationStatusInfrastructure.Service
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, ex);
                 return ex.Message;
             }
         }
@@ -96,6 +102,7 @@ namespace TestStationStatusInfrastructure.Service
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, ex);
                 return ex.Message;
             }
         }
@@ -161,10 +168,12 @@ namespace TestStationStatusInfrastructure.Service
                         test += validationError.PropertyName + "," + validationError.ErrorMessage + "\r\n";
                     }
                 }
+                _logger.Log(LogLevel.Error, test);
                 return test;
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, ex);
                 return ex.Message;
             }
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Owin;
+using NLog;
 using Owin;
 using TestStationStatusInfrastructure;
 
@@ -8,8 +9,11 @@ namespace TestStationStatus
 {
     public partial class Startup
     {
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
+
         public void Configuration(IAppBuilder app)
         {
+            _logger.Log(LogLevel.Info, "Application started");
             // Create instance of DB
             using (var ctx = new TestStationContext())
             {

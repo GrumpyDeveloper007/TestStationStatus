@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,8 @@ namespace TestStationStatusInfrastructure.Service
     /// </summary>
     public class LocalTestDataService
     {
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
+
         public string WorkingFolder = @"C:\kf2_ats";
         StatusModel _CurrentModel = new StatusModel();
 
@@ -136,7 +139,7 @@ namespace TestStationStatusInfrastructure.Service
                 foreach (string item in queueItems)
                 {
                     bool found = false;
-                    string fileName = System.IO.Path.GetFileNameWithoutExtension(item);
+                    string fileName = System.IO.Path.GetFileName(item);
                     foreach (string completedItem in completedItems)
                     {
                         if (completedItem.Contains(fileName))
@@ -166,6 +169,7 @@ namespace TestStationStatusInfrastructure.Service
             catch (Exception ex)
             {
                 _CurrentModel.ApplicationStatus = "File locked";
+                _logger.Log(LogLevel.Error, ex);
             }
             return _CurrentModel;
         }

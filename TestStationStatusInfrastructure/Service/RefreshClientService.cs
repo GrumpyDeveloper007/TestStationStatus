@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,8 @@ namespace TestStationStatusInfrastructure.Service
     /// </summary>
     public class RefreshClientService
     {
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
+
         LocalTestDataService _localDataServiceB;
         LocalTestDataService _localDataService;
         ServerDataService _ServerDataService;
@@ -46,6 +49,7 @@ namespace TestStationStatusInfrastructure.Service
             foreach (var fileName in fileNames)
             {
                 duration += _ServerDataService.GetDurationOfTestCase(fileName);
+                _logger.Log(LogLevel.Debug, "cal duration:" + fileName + "duration:" + duration);
             }
             return duration;
         }
@@ -55,56 +59,55 @@ namespace TestStationStatusInfrastructure.Service
 
             while (Running == true)
             {
-                var modelA = _localDataService.UpdateModel();
-                var modelB = _localDataServiceB.UpdateModel();
-
-                if (modelA.ApplicationStatus.Contains ("Complete") || modelA.ApplicationStatus.Contains("Reading from EmpWin"))
+                try
                 {
-                    SaveDuration(modelA);
-                }
+                    var modelA = _localDataService.UpdateModel();
+                    var modelB = _localDataServiceB.UpdateModel();
 
-                if (modelB.ApplicationStatus.Contains ("Complete") || modelB.ApplicationStatus.Contains("Reading from EmpWin"))
-                {
-                    SaveDuration(modelB);
-                }
-                modelA.MonitorDuration = CalculateDuration(modelA.MonitorFiles);
-                modelB.MonitorDuration = CalculateDuration(modelB.MonitorFiles);
-                modelA.QueueDuration = CalculateDuration(modelA.QueueItems);
-                modelB.QueueDuration = CalculateDuration(modelB.QueueItems);
-                modelA.TestScriptLastDuration = _ServerDataService.GetDurationOfTestCase(modelA.TestScript);
-                modelB.TestScriptLastDuration = _ServerDataService.GetDurationOfTestCase(modelB.TestScript);
-
-                var context2 = GlobalHost.ConnectionManager.GetHubContext<MonitorHub, IMonitorHub>();
-                var Clients = context2.Clients;
-                Clients.All.refreshPage();
-
-
-                //if (modelA.ApplicationStatus != _modelA.ApplicationStatus)
-                {
-                    Clients.All.statusAUpdated(modelA.ApplicationStatus + ", queue : " + (modelA.MonitorFiles.Count() + modelA.QueueItems.Count()) + " duration : " + modelA.MonitorAndQueueDurationString);
-                }
-
-                //if (modelB.ApplicationStatus != _modelB.ApplicationStatus)
-                {
-                    Clients.All.statusBUpdated(modelB.ApplicationStatus + ", queue : " + (modelB.MonitorFiles.Count() + modelB.QueueItems.Count()) + " duration : " + modelB.MonitorAndQueueDurationString);
-                }
-                _modelA = modelA;
-                _modelB = modelB;
-
-
-                bool logged = false;
-                while (logged == false)
-                {
-                    try
+                    if (modelA.ApplicationStatus.Contains("Complete") || modelA.ApplicationStatus.Contains("Reading from EmpWin"))
                     {
-                        // System.IO.File.AppendAllText(@"C:\kf2_ats\weblog.txt", DateTime.Now.ToString("hh:mm:ss.fff") + "refresh page\r\n");
-                        logged = true;
+                        SaveDuration(modelA);
                     }
-                    catch (Exception ex)
-                    { }
-                }
 
-                System.Threading.Thread.Sleep(10000);
+                    if (modelB.ApplicationStatus.Contains("Complete") || modelB.ApplicationStatus.Contains("Reading from EmpWin"))
+                    {
+                        SaveDuration(modelB);
+                    }
+                    modelA.MonitorDuration = CalculateDuration(modelA.MonitorFiles);
+                    modelB.MonitorDuration = CalculateDuration(modelB.MonitorFiles);
+                    modelA.QueueDuration = CalculateDuration(modelA.QueueItems);
+                    modelB.QueueDuration = CalculateDuration(modelB.QueueItems);
+                    modelA.TestScriptLastDuration = _ServerDataService.GetDurationOfTestCase(modelA.TestScript);
+                    modelB.TestScriptLastDuration = _ServerDataService.GetDurationOfTestCase(modelB.TestScript);
+
+                    var context2 = GlobalHost.ConnectionManager.GetHubContext<MonitorHub, IMonitorHub>();
+                    var Clients = context2.Clients;
+                    Clients.All.refreshPage();
+
+
+                    //if (modelA.ApplicationStatus != _modelA.ApplicationStatus)
+                    {
+                        Clients.All.statusAUpdated(modelA.ApplicationStatus + ", queue : " + (modelA.MonitorFiles.Count() + modelA.QueueItems.Count()) + " duration : " + modelA.MonitorAndQueueDurationString);
+                    }
+
+                    //if (modelB.ApplicationStatus != _modelB.ApplicationStatus)
+                    {
+                        Clients.All.statusBUpdated(modelB.ApplicationStatus + ", queue : " + (modelB.MonitorFiles.Count() + modelB.QueueItems.Count()) + " duration : " + modelB.MonitorAndQueueDurationString);
+                    }
+                    _modelA = modelA;
+                    _modelB = modelB;
+
+
+
+                    // System.IO.File.AppendAllText(@"C:\kf2_ats\weblog.txt", DateTime.Now.ToString("hh:mm:ss.fff") + "refresh page\r\n");
+
+
+                    System.Threading.Thread.Sleep(10000);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Error , ex);
+                }
             }
         }
 
@@ -112,6 +115,7 @@ namespace TestStationStatusInfrastructure.Service
         {
             if (Running == false)
             {
+                _logger.Log(LogLevel.Info, "Background service started");
                 _ServerDataService = PoorMansIOC.GetServerDataService();
                 _localDataService = PoorMansIOC.GetLocalTestDataService(); // TODO: replace with IOC container
 

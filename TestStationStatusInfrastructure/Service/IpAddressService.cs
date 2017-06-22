@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -12,6 +13,9 @@ namespace TestStationStatusInfrastructure.Service
     /// </summary>
     public class IpAddressService
     {
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
+
+
         public static string DetermineComputerName(string IP)
         {
             string[] addressesToTry = {IP, "INDELPC217", "INDELNB352" };
@@ -34,6 +38,7 @@ namespace TestStationStatusInfrastructure.Service
                 catch (Exception ex)
                 {
                     // Ignore DNS errors
+                    _logger.Log(LogLevel.Info, ex);
                 }
 
                 if (GetIPHost != null)
