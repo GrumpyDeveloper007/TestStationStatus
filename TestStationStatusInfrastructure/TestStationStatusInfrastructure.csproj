@@ -80,7 +80,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DbSetExtension.cs" />
+    <Compile Include="Database\DbSetExtension.cs" />
+    <Compile Include="Database\TestStationContextFactory.cs" />
     <Compile Include="Hubs\IMonitorHub.cs" />
     <Compile Include="Hubs\MonitorHub.cs" />
     <Compile Include="PoorMansIOC.cs" />
@@ -88,7 +89,7 @@
     <Compile Include="Service\LocalTestDataService.cs" />
     <Compile Include="Service\RefreshClientService.cs" />
     <Compile Include="Service\ServerDataService.cs" />
-    <Compile Include="TestStationContext.cs" />
+    <Compile Include="Database\TestStationContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +107,7 @@
       <Name>TestStationStatusDomain</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

@@ -23,6 +23,8 @@ namespace TestStationStatus.Models
         public double QueueDuration;
         public double MonitorDuration;
         public double TestScriptLastDuration;
+        public bool QueueDurationKnown;
+        public bool MonitorDurationKnown;
 
         public StatusModel()
         {
@@ -30,6 +32,9 @@ namespace TestStationStatus.Models
             ResultsFile = new List<string>();
             QueueItems = new List<string>();
             MonitorFiles = new List<string>();
+            ApplicationStatus = "";
+            QueueDurationKnown = true;
+            MonitorDurationKnown = true;
         }
 
         public string LastUpdateTimeString
@@ -42,11 +47,16 @@ namespace TestStationStatus.Models
             }
         }
 
-        public string MonitorAndQueueDurationString
+        public string TimeUntilStationIsFreeString
         {
             get
             {
-                return TimeSpan.FromSeconds(QueueDuration+MonitorDuration).ToString();
+                double timeLeftOnCurrentTest = 0;
+                if (!string.IsNullOrWhiteSpace(LastUpdateTime) && TestScriptLastDuration > 0)
+                {
+                    timeLeftOnCurrentTest = TestScriptLastDuration - double.Parse(LastUpdateTime);
+                }
+                return TimeSpan.FromSeconds(QueueDuration + MonitorDuration + timeLeftOnCurrentTest).ToString(@"hh\:mm\:ss") + ((QueueDurationKnown && MonitorDurationKnown) ? "" : "?");
             }
         }
 
@@ -54,7 +64,7 @@ namespace TestStationStatus.Models
         {
             get
             {
-                return TimeSpan.FromSeconds(QueueDuration).ToString();
+                return TimeSpan.FromSeconds(QueueDuration).ToString(@"hh\:mm\:ss") + (QueueDurationKnown ? "" : "?");
             }
         }
 
@@ -62,7 +72,7 @@ namespace TestStationStatus.Models
         {
             get
             {
-                return TimeSpan.FromSeconds(MonitorDuration).ToString();
+                return TimeSpan.FromSeconds(MonitorDuration).ToString(@"hh\:mm\:ss") + (MonitorDurationKnown ? "" : "?");
             }
         }
 

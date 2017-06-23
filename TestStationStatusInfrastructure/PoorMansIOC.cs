@@ -1,4 +1,6 @@
-﻿using TestStationStatusInfrastructure.Service;
+﻿using System.Collections.Generic;
+using TestStationStatusInfrastructure.Database;
+using TestStationStatusInfrastructure.Service;
 
 namespace TestStationStatusInfrastructure
 {
@@ -13,12 +15,24 @@ namespace TestStationStatusInfrastructure
         private static LocalTestDataService _SingleInstanceLocalData2;
         private static ServerDataService _SingleInstanceServerData;
         private static RefreshClientService _SingleInstanceRefreshData;
+        private static IpAddressService _SingleInstanceIpAddressService;
+
+        private static string[] IpLoopUpsToTry={ "INDELPC217", "INDELNB352" };
+
+        public static IpAddressService GetIpAddressService()
+        {
+            if (_SingleInstanceIpAddressService == null)
+            {
+                _SingleInstanceIpAddressService = new IpAddressService(IpLoopUpsToTry);
+            }
+            return _SingleInstanceIpAddressService;
+        }
 
         public static LocalTestDataService GetLocalTestDataService()
         {
             if (_SingleInstanceLocalData == null)
             {
-                _SingleInstanceLocalData = new LocalTestDataService();
+                _SingleInstanceLocalData = new LocalTestDataService(GetIpAddressService());
             }
             return _SingleInstanceLocalData;
         }
@@ -27,7 +41,7 @@ namespace TestStationStatusInfrastructure
         {
             if (_SingleInstanceLocalData2 == null)
             {
-                _SingleInstanceLocalData2 = new LocalTestDataService();
+                _SingleInstanceLocalData2 = new LocalTestDataService(GetIpAddressService());
             }
             return _SingleInstanceLocalData2;
         }
@@ -36,7 +50,7 @@ namespace TestStationStatusInfrastructure
         {
             if (_SingleInstanceServerData == null)
             {
-                _SingleInstanceServerData = new ServerDataService();
+                _SingleInstanceServerData = new ServerDataService(new TestStationContextFactory ());
             }
             return _SingleInstanceServerData;
         }

@@ -6,21 +6,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TestStationStatusDomain.Entities;
+using TestStationStatusInfrastructure.Database;
 
 namespace TestStationStatusInfrastructure.Service
 {
     /// <summary>
-    /// An POC API created to replace the file based communication
+    /// A database layer that uses entity framework
     /// </summary>
     public class ServerDataService
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
+        private TestStationContextFactory _testStationContextFactory;
+
+        public ServerDataService(TestStationContextFactory testStationContextFactory)
+        {
+            _testStationContextFactory = testStationContextFactory;
+        }
 
         public IEnumerable<StatusUpdate> GetCurrentStatusUpdate()
         {
             try
             {
-                using (var ctx = new TestStationContext())
+                using (var ctx = _testStationContextFactory.OpenSession())
                 {
 
                     return ctx.CurrentStationStatus.ToArray();
@@ -33,20 +40,60 @@ namespace TestStationStatusInfrastructure.Service
             }
         }
 
+        public IEnumerable<ReverseDNSFail> GetReverseDNSFails()
+        {
+            try
+            {
+                using (var ctx = _testStationContextFactory.OpenSession())
+                {
+                    return ctx.ReverseDNSFails.ToArray();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, ex);
+                return new ReverseDNSFail[0];
+            }
+        }
+
+        public IEnumerable<string> GetReverseDNSFailsAsList()
+        {
+            try
+            {
+                using (var ctx = _testStationContextFactory.OpenSession())
+                {
+                    return ctx.ReverseDNSFails.Select((x) => (x.PCName)).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, ex);
+                return new string[0];
+            }
+        }
+
+
         public double GetDurationOfTestCase(string fileName)
         {
             try
             {
-                using (var ctx = new TestStationContext())
+                using (var ctx = _testStationContextFactory.OpenSession())
                 {
-                    var existingRecord = ctx.TestDuration.Where(x => x.TestCaseName == fileName).FirstOrDefault();
+                    // try to match PC name first
+                    var existingRecord = ctx.TestDuration.Where(x => x.TestCaseName == fileName && x.TestStationName == Environment.MachineName).FirstOrDefault();
+
+                    // if no record exists for the test station, try other test stations
+                    if (existingRecord == null)
+                        existingRecord = ctx.TestDuration.Where(x => x.TestCaseName == fileName).FirstOrDefault();
 
                     if (existingRecord == null)
                     {
+                        _logger.Log(LogLevel.Debug, "Duration not found for test case : " + fileName);
                         return 0;
                     }
                     else
                     {
+                        //_logger.Log(LogLevel.Debug, "Duration found for test case : " + fileName + " duration : " + existingRecord.DurationSeconds);
                         return existingRecord.DurationSeconds;
                     }
 
@@ -64,9 +111,9 @@ namespace TestStationStatusInfrastructure.Service
         {
             try
             {
-                using (var ctx = new TestStationContext())
+                using (var ctx = _testStationContextFactory.OpenSession())
                 {
-                    var existingRecord = ctx.TestDuration.Where(x => x.TestStationName == value.TestStationName && x.TestCaseName ==value.TestCaseName).FirstOrDefault();
+                    var existingRecord = ctx.TestDuration.Where(x => x.TestStationName == value.TestStationName && x.TestCaseName == value.TestCaseName).FirstOrDefault();
 
                     if (existingRecord == null)
                     {
@@ -93,7 +140,7 @@ namespace TestStationStatusInfrastructure.Service
         {
             try
             {
-                using (var ctx = new TestStationContext())
+                using (var ctx = _testStationContextFactory.OpenSession())
                 {
                     ctx.CompletedTests.Add(completedTest);
                     ctx.SaveChanges();
@@ -111,7 +158,7 @@ namespace TestStationStatusInfrastructure.Service
         {
             try
             {
-                using (var ctx = new TestStationContext())
+                using (var ctx = _testStationContextFactory.OpenSession())
                 {
 
                     if (value.Status == "Completed" || value.Status == "Cancelled")
@@ -157,19 +204,6 @@ namespace TestStationStatusInfrastructure.Service
                     ctx.SaveChanges();
                     return "";
                 }
-            }
-            catch (DbEntityValidationException dbEx)
-            {
-                string test = "";
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        test += validationError.PropertyName + "," + validationError.ErrorMessage + "\r\n";
-                    }
-                }
-                _logger.Log(LogLevel.Error, test);
-                return test;
             }
             catch (Exception ex)
             {

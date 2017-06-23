@@ -20,8 +20,15 @@ namespace TestStationStatusInfrastructure.Service
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
+        private IpAddressService _IpAddressService;
+
         public string WorkingFolder = @"C:\kf2_ats";
         StatusModel _CurrentModel = new StatusModel();
+
+        public LocalTestDataService(IpAddressService ipAddressService)
+        {
+            _IpAddressService = ipAddressService;
+        }
 
         public void KillCurrentTestCase()
         {
@@ -30,7 +37,7 @@ namespace TestStationStatusInfrastructure.Service
 
         public void UploadFile(HttpPostedFileBase[] files, string iPAddress)
         {
-            string computerName = IpAddressService.DetermineComputerName(iPAddress);
+            string computerName = _IpAddressService.DetermineComputerName(iPAddress);
 
             foreach (HttpPostedFileBase file in files)
             {
@@ -49,7 +56,7 @@ namespace TestStationStatusInfrastructure.Service
 
         public void UploadFile(HttpFileCollectionBase files, string iPAddress)
         {
-            string computerName = IpAddressService.DetermineComputerName(iPAddress);
+            string computerName = _IpAddressService.DetermineComputerName(iPAddress);
 
             for (int i = 0; i < files.Count; i++)
             {
@@ -90,9 +97,7 @@ namespace TestStationStatusInfrastructure.Service
             try
 
             {
-                _CurrentModel.StatusFile.Clear();
-                _CurrentModel.ResultsFile.Clear();
-                _CurrentModel.ApplicationStatus = "";
+                _CurrentModel = new StatusModel();
                 _CurrentModel.TestPlanActive = IsMidnightRunning().ToString();
                 _CurrentModel.WebQueryTime = DateTime.Now.ToLongTimeString();
 
@@ -163,7 +168,9 @@ namespace TestStationStatusInfrastructure.Service
                     _CurrentModel.MonitorFiles.Add(Path.GetFileName(file));
                 }
                 _CurrentModel.QueueDuration = 0;
+                _CurrentModel.QueueDurationKnown = true;
                 _CurrentModel.MonitorDuration = 0;
+                _CurrentModel.MonitorDurationKnown = true;
 
             }
             catch (Exception ex)

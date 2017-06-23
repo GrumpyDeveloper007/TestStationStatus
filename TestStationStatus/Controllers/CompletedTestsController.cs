@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using TestStationStatusDomain.Entities;
 using TestStationStatusInfrastructure;
+using TestStationStatusInfrastructure.Database;
 
 namespace TestStationStatus.Controllers
 {

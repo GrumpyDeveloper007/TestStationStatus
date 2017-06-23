@@ -14,11 +14,27 @@ namespace TestStationStatusInfrastructure.Service
     public class IpAddressService
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
+        private List<string> _lookupsToTry;
 
-
-        public static string DetermineComputerName(string IP)
+        public IpAddressService(string[] lookupsToTry)
         {
-            string[] addressesToTry = {IP, "INDELPC217", "INDELNB352" };
+            _lookupsToTry = new List<string>();
+            _lookupsToTry.AddRange(lookupsToTry);
+        }
+
+        public void UpdateLoopUpsToTry(string[] lookupsToTry)
+        {
+            if (lookupsToTry.Count() > 0)
+            {
+                _lookupsToTry = new List<string>(lookupsToTry);
+            }
+        }
+
+        public string DetermineComputerName(string IP)
+        {
+            List<string> addressesToTry = new List<string>();
+            addressesToTry.Add(IP);
+            addressesToTry.AddRange(_lookupsToTry);
             int i = 0;
             IPHostEntry GetIPHost = null;
             bool found = false;
@@ -30,7 +46,7 @@ namespace TestStationStatusInfrastructure.Service
                 try
                 {
                     GetIPHost = Dns.GetHostEntry(addressToCheck);
-                    if (i==1)
+                    if (i == 1)
                     {
                         found = true;
                     }

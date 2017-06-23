@@ -18,10 +18,12 @@ namespace TestStationStatusInfrastructure.Service
     public class RefreshClientService
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
+        const int _RefreshDataIntervalMs = 10000;
 
         LocalTestDataService _localDataServiceB;
         LocalTestDataService _localDataService;
         ServerDataService _ServerDataService;
+        IHubConnectionContext<IMonitorHub> _MonitorHub;
 
         StatusModel _modelA = new StatusModel();
         StatusModel _modelB = new StatusModel();
@@ -42,17 +44,39 @@ namespace TestStationStatusInfrastructure.Service
             }
         }
 
-        private double CalculateDuration(List<string> fileNames)
+        private double CalculateDuration(List<string> fileNames, ref bool known)
         {
             double duration = 0;
+            known = true;
 
             foreach (var fileName in fileNames)
             {
-                duration += _ServerDataService.GetDurationOfTestCase(fileName);
-                _logger.Log(LogLevel.Debug, "cal duration:" + fileName + "duration:" + duration);
+                double fileDuration = _ServerDataService.GetDurationOfTestCase(fileName);
+                if (fileDuration == 0)
+                {
+                    known = false;
+                    _logger.Log(LogLevel.Debug, "unknown duration:" + fileName + "duration:" + duration);
+                }
+                duration += fileDuration;
+
             }
             return duration;
         }
+
+        private bool IsListDifferent(List<string> newList, List<string> oldList)
+        {
+            if (newList.Count != oldList.Count)
+                return true;
+            for (int i = 0; i < newList.Count; i++)
+            {
+                if (newList[i] != oldList[i])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
         private void thread()
         {
@@ -73,40 +97,48 @@ namespace TestStationStatusInfrastructure.Service
                     {
                         SaveDuration(modelB);
                     }
-                    modelA.MonitorDuration = CalculateDuration(modelA.MonitorFiles);
-                    modelB.MonitorDuration = CalculateDuration(modelB.MonitorFiles);
-                    modelA.QueueDuration = CalculateDuration(modelA.QueueItems);
-                    modelB.QueueDuration = CalculateDuration(modelB.QueueItems);
-                    modelA.TestScriptLastDuration = _ServerDataService.GetDurationOfTestCase(modelA.TestScript);
-                    modelB.TestScriptLastDuration = _ServerDataService.GetDurationOfTestCase(modelB.TestScript);
+                    modelA.MonitorDuration = _modelA.MonitorDuration;
+                    modelB.MonitorDuration = _modelB.MonitorDuration;
+                    modelA.TestScriptLastDuration = _modelA.TestScriptLastDuration;
+                    modelB.TestScriptLastDuration = _modelB.TestScriptLastDuration;
+                    modelA.QueueDuration = _modelA.QueueDuration;
+                    modelB.QueueDuration = _modelB.QueueDuration;
+                    modelA.MonitorDurationKnown = _modelA.MonitorDurationKnown;
+                    modelB.MonitorDurationKnown = _modelB.MonitorDurationKnown;
 
-                    var context2 = GlobalHost.ConnectionManager.GetHubContext<MonitorHub, IMonitorHub>();
-                    var Clients = context2.Clients;
-                    Clients.All.refreshPage();
+                    if (IsListDifferent(modelA.MonitorFiles, _modelA.MonitorFiles))
+                        modelA.MonitorDuration = CalculateDuration(modelA.MonitorFiles, ref modelA.MonitorDurationKnown);
+                    if (IsListDifferent(modelB.MonitorFiles, _modelB.MonitorFiles))
+                        modelB.MonitorDuration = CalculateDuration(modelB.MonitorFiles, ref modelB.MonitorDurationKnown);
+                    if (IsListDifferent(modelA.QueueItems, _modelA.QueueItems))
+                        modelA.QueueDuration = CalculateDuration(modelA.QueueItems, ref modelA.QueueDurationKnown);
+                    if (IsListDifferent(modelB.QueueItems, _modelB.QueueItems))
+                        modelB.QueueDuration = CalculateDuration(modelB.QueueItems, ref modelB.QueueDurationKnown);
+                    if (!string.IsNullOrWhiteSpace(modelA.TestScript))
+                        modelA.TestScriptLastDuration = _ServerDataService.GetDurationOfTestCase(modelA.TestScript);
+                    if (!string.IsNullOrWhiteSpace(modelB.TestScript))
+                        modelB.TestScriptLastDuration = _ServerDataService.GetDurationOfTestCase(modelB.TestScript);
+
+                    _MonitorHub.All.refreshPage();
 
 
                     //if (modelA.ApplicationStatus != _modelA.ApplicationStatus)
                     {
-                        Clients.All.statusAUpdated(modelA.ApplicationStatus + ", queue : " + (modelA.MonitorFiles.Count() + modelA.QueueItems.Count()) + " duration : " + modelA.MonitorAndQueueDurationString);
+                        _MonitorHub.All.statusAUpdated(modelA.ApplicationStatus + ", queue : " + (modelA.MonitorFiles.Count() + modelA.QueueItems.Count()) + " Free to run a new test in : " + modelA.TimeUntilStationIsFreeString);
                     }
 
                     //if (modelB.ApplicationStatus != _modelB.ApplicationStatus)
                     {
-                        Clients.All.statusBUpdated(modelB.ApplicationStatus + ", queue : " + (modelB.MonitorFiles.Count() + modelB.QueueItems.Count()) + " duration : " + modelB.MonitorAndQueueDurationString);
+                        _MonitorHub.All.statusBUpdated(modelB.ApplicationStatus + ", queue : " + (modelB.MonitorFiles.Count() + modelB.QueueItems.Count()) + " Free to run a new test in : " + modelB.TimeUntilStationIsFreeString);
                     }
                     _modelA = modelA;
                     _modelB = modelB;
 
-
-
-                    // System.IO.File.AppendAllText(@"C:\kf2_ats\weblog.txt", DateTime.Now.ToString("hh:mm:ss.fff") + "refresh page\r\n");
-
-
-                    System.Threading.Thread.Sleep(10000);
+                    System.Threading.Thread.Sleep(_RefreshDataIntervalMs);
                 }
                 catch (Exception ex)
                 {
-                    _logger.Log(LogLevel.Error , ex);
+                    _logger.Log(LogLevel.Error, ex);
                 }
             }
         }
@@ -116,7 +148,16 @@ namespace TestStationStatusInfrastructure.Service
             if (Running == false)
             {
                 _logger.Log(LogLevel.Info, "Background service started");
+
+                var context = GlobalHost.ConnectionManager.GetHubContext<MonitorHub, IMonitorHub>();
+                _MonitorHub = context.Clients;
+
                 _ServerDataService = PoorMansIOC.GetServerDataService();
+
+                var ip = PoorMansIOC.GetIpAddressService();
+                var pcs = _ServerDataService.GetReverseDNSFailsAsList();
+                ip.UpdateLoopUpsToTry(pcs.ToArray());
+
                 _localDataService = PoorMansIOC.GetLocalTestDataService(); // TODO: replace with IOC container
 
                 _localDataServiceB = PoorMansIOC.GetLocalTestDataService2(); // TODO: replace with IOC container
