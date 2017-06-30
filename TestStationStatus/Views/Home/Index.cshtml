@@ -22,18 +22,22 @@
             $.connection.hub.logging = true;
 
             monitor = $.connection.monitorHub;
-            monitor.client.statusAUpdated = statusAUpdated;
-            monitor.client.statusBUpdated = statusBUpdated;
+            monitor.client.Updated = Updated;
 
             $.connection.hub.start({ transport: 'longPolling' });
         });
 
-        function statusAUpdated(message) {
-            $('#statusA').text(message);
-        };
+        function Updated(messagea, currentScripta, messageb, currentScriptb,
+            messagea2, currentScripta2, messageb2, currentScriptb2) {
+            $('#statusA').text(messagea);
+            $('#currentScriptA').text(currentScripta);
+            $('#statusB').text(messageb);
+            $('#currentScriptB').text(currentScriptb);
 
-        function statusBUpdated(message) {
-            $('#statusB').text(message);
+            $('#statusA2').text(messagea2);
+            $('#currentScriptA2').text(currentScripta2);
+            $('#statusB2').text(messageb2);
+            $('#currentScriptB2').text(currentScriptb2);
         };
 
         $.connection.hub.error(function (err) {
@@ -73,23 +77,53 @@
     </div>-->
     <div class="col-md-6">
         <h2>Test Case queueing</h2>
-        <p></p>
-        @using (Html.BeginForm("Upload2", "Status", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            <p id="statusA">*Loading*</p>
-            <p>
-                @Html.TextBoxFor(m => m.filesA, new { type = "file", name = "file", multiple = "multiple" })
-                <input type="submit" value="Queue A" />
-            </p>
-        }
-        @using (Html.BeginForm("Upload2", "StatusB", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            <p id="statusB">*Loading*</p>
-            <p>
-                @Html.TextBoxFor(m => m.filesB, new { type = "file", name = "file", multiple = "multiple" })
-                <input type="submit" value="Queue B" />
-            </p>
-        }
+
+        <div>
+            <p>418 A</p>
+            @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data", test = Model }))
+            {
+                @Html.Hidden("id", 0)
+                <p id="statusA">*Loading*</p>
+                <p id="currentScriptA">*Loading*</p>
+                <p>
+                    @Html.TextBoxFor(m => m.filesA, new { type = "file", name = "file", multiple = "multiple" })
+                    <input type="submit" value="Queue A" />
+                </p>
+            }
+            <p>418 B</p>
+            @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.Hidden("id", 1)
+                <p id="statusB">*Loading*</p>
+                <p id="currentScriptB">*Loading*</p>
+                <p>
+                    @Html.TextBoxFor(m => m.filesB, new { type = "file", name = "file", multiple = "multiple" })
+                    <input type="submit" value="Queue B" />
+                </p>
+            }
+            <p>419 A</p>
+            @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.Hidden("id", 2)
+                <p id="statusA2">*Loading*</p>
+                <p id="currentScriptA2">*Loading*</p>
+                <p>
+                    @Html.TextBoxFor(m => m.filesA2, new { type = "file", name = "file", multiple = "multiple" })
+                    <input type="submit" value="Queue A" />
+                </p>
+            }
+            <p>419 B</p>
+            @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.Hidden("id", 3)
+                <p id="statusB2">*Loading*</p>
+                <p id="currentScriptB2">*Loading*</p>
+                <p>
+                    @Html.TextBoxFor(m => m.filesB2, new { type = "file", name = "file", multiple = "multiple" })
+                    <input type="submit" value="Queue B" />
+                </p>
+            }
+        </div>
     </div>
 
        <!-- <iframe id="status1" width="800" height="800" src="~/status/Status" name="targetframe" allowTransparency="true" scrolling="no" frameborder="0"></iframe>

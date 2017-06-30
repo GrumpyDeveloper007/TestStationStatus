@@ -11,8 +11,7 @@ namespace TestStationStatusInfrastructure
     /// </summary>
     public static class PoorMansIOC
     {
-        private static LocalTestDataService _SingleInstanceLocalData;
-        private static LocalTestDataService _SingleInstanceLocalData2;
+        private static List<LocalTestDataService> _LocalData=new List<LocalTestDataService> ();
         private static ServerDataService _SingleInstanceServerData;
         private static RefreshClientService _SingleInstanceRefreshData;
         private static IpAddressService _SingleInstanceIpAddressService;
@@ -28,22 +27,18 @@ namespace TestStationStatusInfrastructure
             return _SingleInstanceIpAddressService;
         }
 
-        public static LocalTestDataService GetLocalTestDataService()
+        public static List<LocalTestDataService> GetLocalTestDataServices()
         {
-            if (_SingleInstanceLocalData == null)
-            {
-                _SingleInstanceLocalData = new LocalTestDataService(GetIpAddressService());
-            }
-            return _SingleInstanceLocalData;
+            return _LocalData;
         }
 
-        public static LocalTestDataService GetLocalTestDataService2()
+        public static LocalTestDataService GetLocalTestDataService(int index)
         {
-            if (_SingleInstanceLocalData2 == null)
+            while (_LocalData.Count <= index)
             {
-                _SingleInstanceLocalData2 = new LocalTestDataService(GetIpAddressService());
+                _LocalData.Add(new LocalTestDataService(GetIpAddressService()));
             }
-            return _SingleInstanceLocalData2;
+            return _LocalData[index];
         }
 
         public static ServerDataService GetServerDataService()

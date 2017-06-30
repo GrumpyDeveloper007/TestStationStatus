@@ -75,6 +75,9 @@ namespace TestStationStatusInfrastructure.Service
 
         public double GetDurationOfTestCase(string fileName)
         {
+            if (string.IsNullOrWhiteSpace(fileName))
+            { return 0; }
+
             try
             {
                 using (var ctx = _testStationContextFactory.OpenSession())

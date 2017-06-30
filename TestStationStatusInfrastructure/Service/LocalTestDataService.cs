@@ -23,7 +23,7 @@ namespace TestStationStatusInfrastructure.Service
         private IpAddressService _IpAddressService;
 
         public string WorkingFolder = @"C:\kf2_ats";
-        StatusModel _CurrentModel = new StatusModel();
+        public StatusModel CurrentModel = new StatusModel();
 
         public LocalTestDataService(IpAddressService ipAddressService)
         {
@@ -89,7 +89,7 @@ namespace TestStationStatusInfrastructure.Service
 
         public StatusModel GetModelFromLocalFiles()
         {
-            return _CurrentModel;
+            return CurrentModel;
         }
 
         public StatusModel UpdateModel()
@@ -97,50 +97,54 @@ namespace TestStationStatusInfrastructure.Service
             try
 
             {
-                _CurrentModel = new StatusModel();
-                _CurrentModel.TestPlanActive = IsMidnightRunning().ToString();
-                _CurrentModel.WebQueryTime = DateTime.Now.ToLongTimeString();
+                var model = new StatusModel();
+                model.TestPlanActive = IsMidnightRunning().ToString();
+                model.WebQueryTime = DateTime.Now.ToLongTimeString();
+                model.MonitorDuration = CurrentModel.MonitorDuration;
+                model.TestScriptLastDuration = CurrentModel.TestScriptLastDuration;
+                model.QueueDuration = CurrentModel.QueueDuration;
+                model.MonitorDurationKnown = CurrentModel.MonitorDurationKnown;
 
                 if (System.IO.File.Exists(WorkingFolder + @"\e420\ApplicationSummary.txt"))
                 {
                     var lines = System.IO.File.ReadAllLines(WorkingFolder + @"\e420\ApplicationSummary.txt");
-                    _CurrentModel.StatusFile.AddRange(lines);
+                    model.StatusFile.AddRange(lines);
                 }
 
                 if (System.IO.File.Exists(WorkingFolder + @"\e420\ApplicationStatus.txt"))
                 {
                     var status = System.IO.File.ReadAllLines(WorkingFolder + @"\e420\ApplicationStatus.txt");
-                    _CurrentModel.ApplicationStatus = status[0];
+                    model.ApplicationStatus = status[0];
                     if (status.Count() > 1)
                     {
                         if (!string.IsNullOrWhiteSpace(status[1]))
-                            _CurrentModel.LastUpdateTime = status[1];
+                            model.LastUpdateTime = status[1];
                     }
                     if (status.Count() > 2)
                     {
                         if (!string.IsNullOrWhiteSpace(status[2]))
-                            _CurrentModel.TestScript = Path.GetFileName(status[2]);
+                            model.TestScript = Path.GetFileName(status[2]);
                     }
                     if (status.Count() > 3)
                     {
                         if (!string.IsNullOrWhiteSpace(status[3]))
-                            _CurrentModel.LogFile = status[3];
+                            model.LogFile = status[3];
                     }
                 }
                 else
                 {
-                    _CurrentModel.ApplicationStatus = "No status to report, please run a test script";
+                    model.ApplicationStatus = "No status to report, please run a test script";
                 }
 
                 if (System.IO.File.Exists(WorkingFolder + @"\e420\ApplicationResults.txt"))
                 {
                     var lines = System.IO.File.ReadAllLines(WorkingFolder + @"\e420\ApplicationResults.txt");
-                    _CurrentModel.ResultsFile.AddRange(lines);
+                    model.ResultsFile.AddRange(lines);
                 }
 
                 var queueItems = System.IO.Directory.GetFiles(WorkingFolder + @"\queue\", "*.TST");
                 var completedItems = System.IO.Directory.GetFiles(WorkingFolder + @"\queue\", "*.LST");
-                _CurrentModel.QueueItems.Clear();
+                model.QueueItems.Clear();
                 foreach (string item in queueItems)
                 {
                     bool found = false;
@@ -157,28 +161,30 @@ namespace TestStationStatusInfrastructure.Service
                     if (found == false)
                     {
 
-                        _CurrentModel.QueueItems.Add(Path.GetFileName(fileName));
+                        model.QueueItems.Add(Path.GetFileName(fileName));
                     }
                 }
 
                 var monitorFiles = System.IO.Directory.GetFiles(WorkingFolder + @"\E420MonitorTestPlan", "*.TST");
-                _CurrentModel.MonitorFiles = new List<string>();
+                model.MonitorFiles = new List<string>();
                 foreach (var file in monitorFiles)
                 {
-                    _CurrentModel.MonitorFiles.Add(Path.GetFileName(file));
+                    model.MonitorFiles.Add(Path.GetFileName(file));
                 }
-                _CurrentModel.QueueDuration = 0;
-                _CurrentModel.QueueDurationKnown = true;
-                _CurrentModel.MonitorDuration = 0;
-                _CurrentModel.MonitorDurationKnown = true;
-
+                model.QueueDuration = 0;
+                model.QueueDurationKnown = true;
+                model.MonitorDuration = 0;
+                model.MonitorDurationKnown = true;
+                CurrentModel = model;
             }
             catch (Exception ex)
             {
-                _CurrentModel.ApplicationStatus = "File locked";
+                CurrentModel.ApplicationStatus = "File locked";
                 _logger.Log(LogLevel.Error, ex);
             }
-            return _CurrentModel;
+
+
+            return CurrentModel;
         }
 
     }

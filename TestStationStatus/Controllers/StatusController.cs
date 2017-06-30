@@ -21,7 +21,7 @@ namespace TestStationStatus.Controllers
 
         public StatusController()
         {
-            _localDataService = PoorMansIOC.GetLocalTestDataService(); // TODO: replace with IOC container
+            _localDataService = PoorMansIOC.GetLocalTestDataService(0); // TODO: replace with IOC container
             _dataUpdatedClient = PoorMansIOC.GetRefreshDataService();
         }
 

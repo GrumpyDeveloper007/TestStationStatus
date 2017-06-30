@@ -20,7 +20,7 @@ namespace TestStationStatus.Controllers
 
         public StatusBController()
         {
-            _localDataService = PoorMansIOC.GetLocalTestDataService2(); // TODO: replace with IOC container
+            _localDataService = PoorMansIOC.GetLocalTestDataService(1); // TODO: replace with IOC container
             _localDataService.WorkingFolder = @"C:\kf2_atsB";
             _dataUpdatedClient = PoorMansIOC.GetRefreshDataService();
         }

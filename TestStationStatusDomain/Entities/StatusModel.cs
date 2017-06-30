@@ -52,7 +52,7 @@ namespace TestStationStatus.Models
             get
             {
                 double timeLeftOnCurrentTest = 0;
-                if (!string.IsNullOrWhiteSpace(LastUpdateTime) && TestScriptLastDuration > 0)
+                if (!string.IsNullOrWhiteSpace(LastUpdateTime) && TestScriptLastDuration > 0 && TestScriptLastDuration >= double.Parse(LastUpdateTime))
                 {
                     timeLeftOnCurrentTest = TestScriptLastDuration - double.Parse(LastUpdateTime);
                 }

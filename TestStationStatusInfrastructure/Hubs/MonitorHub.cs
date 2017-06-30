@@ -18,9 +18,10 @@ namespace TestStationStatusInfrastructure.Hubs
             Clients.All.refreshPage();
         }
 
-        public void statusAUpdated(string status)
+        public void Updated(string statusA, string currentScriptA, string statusB, string currentScriptB,
+            string statusA2, string currentScriptA2, string statusB2, string currentScriptB2)
         {
-            Clients.All.statusAUpdated(status);
+            Clients.All.statusAUpdated(statusA, currentScriptA, statusB, currentScriptB, statusA2, currentScriptA2, statusB2, currentScriptB2);
         }
 
         public void statusBUpdated(string status)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TestStationStatus.Models;
 using TestStationStatusInfrastructure;
 using TestStationStatusInfrastructure.Service;
 
@@ -26,6 +27,16 @@ namespace TestStationStatus.Controllers
             }
 
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult Upload2(int id,HomeViewModel test)
+        {
+            string IP = Request.UserHostName;
+            var file = Request.Files;
+            // Verify that the user selected a file
+            _dataUpdatedClient.UploadFile(id, file, IP);
+            return Redirect(Request.UrlReferrer.ToString());
         }
 
         public ActionResult About()

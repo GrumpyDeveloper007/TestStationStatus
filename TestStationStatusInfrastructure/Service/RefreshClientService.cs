@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using TestStationStatus.Models;
 using TestStationStatusDomain.Entities;
 using TestStationStatusInfrastructure.Hubs;
@@ -20,14 +21,9 @@ namespace TestStationStatusInfrastructure.Service
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         const int _RefreshDataIntervalMs = 10000;
 
-        LocalTestDataService _localDataServiceB;
-        LocalTestDataService _localDataService;
+        List<LocalTestDataService> _localDataService;
         ServerDataService _ServerDataService;
         IHubConnectionContext<IMonitorHub> _MonitorHub;
-
-        StatusModel _modelA = new StatusModel();
-        StatusModel _modelB = new StatusModel();
-
 
         public System.Threading.Thread BackgroundWorker { get; set; }
 
@@ -78,6 +74,26 @@ namespace TestStationStatusInfrastructure.Service
         }
 
 
+        private void RefreshModel(LocalTestDataService service)
+        {
+            var oldModel = service.CurrentModel;
+            var model = service.UpdateModel();
+
+            if (model.ApplicationStatus.Contains("Complete") || model.ApplicationStatus.Contains("Reading from EmpWin"))
+            {
+                SaveDuration(model);
+            }
+
+            //if (IsListDifferent(modelA.MonitorFiles, _modelA.MonitorFiles))
+            model.MonitorDuration = CalculateDuration(model.MonitorFiles, ref model.MonitorDurationKnown);
+            //if (IsListDifferent(modelA.QueueItems, _modelA.QueueItems))
+            model.QueueDuration = CalculateDuration(model.QueueItems, ref model.QueueDurationKnown);
+            //if (!string.IsNullOrWhiteSpace(modelA.TestScript))
+            model.TestScriptLastDuration = _ServerDataService.GetDurationOfTestCase(model.TestScript);
+
+
+        }
+
         private void thread()
         {
 
@@ -85,61 +101,42 @@ namespace TestStationStatusInfrastructure.Service
             {
                 try
                 {
-                    var modelA = _localDataService.UpdateModel();
-                    var modelB = _localDataServiceB.UpdateModel();
-
-                    if (modelA.ApplicationStatus.Contains("Complete") || modelA.ApplicationStatus.Contains("Reading from EmpWin"))
+                    foreach (var item in _localDataService)
                     {
-                        SaveDuration(modelA);
+                        RefreshModel(item);
                     }
-
-                    if (modelB.ApplicationStatus.Contains("Complete") || modelB.ApplicationStatus.Contains("Reading from EmpWin"))
-                    {
-                        SaveDuration(modelB);
-                    }
-                    modelA.MonitorDuration = _modelA.MonitorDuration;
-                    modelB.MonitorDuration = _modelB.MonitorDuration;
-                    modelA.TestScriptLastDuration = _modelA.TestScriptLastDuration;
-                    modelB.TestScriptLastDuration = _modelB.TestScriptLastDuration;
-                    modelA.QueueDuration = _modelA.QueueDuration;
-                    modelB.QueueDuration = _modelB.QueueDuration;
-                    modelA.MonitorDurationKnown = _modelA.MonitorDurationKnown;
-                    modelB.MonitorDurationKnown = _modelB.MonitorDurationKnown;
-
-                    if (IsListDifferent(modelA.MonitorFiles, _modelA.MonitorFiles))
-                        modelA.MonitorDuration = CalculateDuration(modelA.MonitorFiles, ref modelA.MonitorDurationKnown);
-                    if (IsListDifferent(modelB.MonitorFiles, _modelB.MonitorFiles))
-                        modelB.MonitorDuration = CalculateDuration(modelB.MonitorFiles, ref modelB.MonitorDurationKnown);
-                    if (IsListDifferent(modelA.QueueItems, _modelA.QueueItems))
-                        modelA.QueueDuration = CalculateDuration(modelA.QueueItems, ref modelA.QueueDurationKnown);
-                    if (IsListDifferent(modelB.QueueItems, _modelB.QueueItems))
-                        modelB.QueueDuration = CalculateDuration(modelB.QueueItems, ref modelB.QueueDurationKnown);
-                    if (!string.IsNullOrWhiteSpace(modelA.TestScript))
-                        modelA.TestScriptLastDuration = _ServerDataService.GetDurationOfTestCase(modelA.TestScript);
-                    if (!string.IsNullOrWhiteSpace(modelB.TestScript))
-                        modelB.TestScriptLastDuration = _ServerDataService.GetDurationOfTestCase(modelB.TestScript);
 
                     _MonitorHub.All.refreshPage();
 
-
-                    //if (modelA.ApplicationStatus != _modelA.ApplicationStatus)
+                    try
                     {
-                        _MonitorHub.All.statusAUpdated(modelA.ApplicationStatus + ", queue : " + (modelA.MonitorFiles.Count() + modelA.QueueItems.Count()) + " Free to run a new test in : " + modelA.TimeUntilStationIsFreeString);
-                    }
 
-                    //if (modelB.ApplicationStatus != _modelB.ApplicationStatus)
+
+                        _MonitorHub.All.Updated(_localDataService[0].CurrentModel.ApplicationStatus + ", queue : " + (_localDataService[0].CurrentModel.MonitorFiles.Count() + _localDataService[0].CurrentModel.QueueItems.Count()) + " Free to run a new test in : " + _localDataService[0].CurrentModel.TimeUntilStationIsFreeString, _localDataService[0].CurrentModel.TestScript,
+                            _localDataService[1].CurrentModel.ApplicationStatus + ", queue : " + (_localDataService[1].CurrentModel.MonitorFiles.Count() + _localDataService[1].CurrentModel.QueueItems.Count()) + " Free to run a new test in : " + _localDataService[1].CurrentModel.TimeUntilStationIsFreeString, _localDataService[1].CurrentModel.TestScript,
+                            _localDataService[2].CurrentModel.ApplicationStatus + ", queue : " + (_localDataService[2].CurrentModel.MonitorFiles.Count() + _localDataService[2].CurrentModel.QueueItems.Count()) + " Free to run a new test in : " + _localDataService[2].CurrentModel.TimeUntilStationIsFreeString, _localDataService[2].CurrentModel.TestScript,
+                            _localDataService[3].CurrentModel.ApplicationStatus + ", queue : " + (_localDataService[3].CurrentModel.MonitorFiles.Count() + _localDataService[3].CurrentModel.QueueItems.Count()) + " Free to run a new test in : " + _localDataService[3].CurrentModel.TimeUntilStationIsFreeString, _localDataService[3].CurrentModel.TestScript
+                            );
+                    }
+                    catch (Exception ex)
                     {
-                        _MonitorHub.All.statusBUpdated(modelB.ApplicationStatus + ", queue : " + (modelB.MonitorFiles.Count() + modelB.QueueItems.Count()) + " Free to run a new test in : " + modelB.TimeUntilStationIsFreeString);
+                        _logger.Log(LogLevel.Error, ex, "Error in signalR");
                     }
-                    _modelA = modelA;
-                    _modelB = modelB;
-
-                    System.Threading.Thread.Sleep(_RefreshDataIntervalMs);
                 }
                 catch (Exception ex)
                 {
                     _logger.Log(LogLevel.Error, ex);
                 }
+                System.Threading.Thread.Sleep(_RefreshDataIntervalMs);
+            }
+        }
+
+        public void UploadFile(int index, HttpFileCollectionBase files, string IP)
+        {
+            // Verify that the user selected a file
+            if (files != null && files.Count>0 && files[0] != null && files[0].ContentLength > 0)
+            {
+                _localDataService[index].UploadFile(files, IP);
             }
         }
 
@@ -158,10 +155,19 @@ namespace TestStationStatusInfrastructure.Service
                 var pcs = _ServerDataService.GetReverseDNSFailsAsList();
                 ip.UpdateLoopUpsToTry(pcs.ToArray());
 
-                _localDataService = PoorMansIOC.GetLocalTestDataService(); // TODO: replace with IOC container
+                _localDataService = PoorMansIOC.GetLocalTestDataServices();
 
-                _localDataServiceB = PoorMansIOC.GetLocalTestDataService2(); // TODO: replace with IOC container
-                _localDataServiceB.WorkingFolder = @"C:\kf2_atsB";
+                var localDataServiceA = PoorMansIOC.GetLocalTestDataService(0); // TODO: replace with IOC container
+                localDataServiceA.WorkingFolder = @"\\ausydpc418\KF2_ATS";
+
+                var localDataServiceB = PoorMansIOC.GetLocalTestDataService(1); // TODO: replace with IOC container
+                localDataServiceB.WorkingFolder = @"\\ausydpc418\KF2_ATSB";
+
+                var localDataServiceA2 = PoorMansIOC.GetLocalTestDataService(2); // TODO: replace with IOC container
+                localDataServiceA2.WorkingFolder = @"\\ausydpc419\KF2_ATS";
+
+                var localDataServiceB2 = PoorMansIOC.GetLocalTestDataService(3); // TODO: replace with IOC container
+                localDataServiceB2.WorkingFolder = @"\\ausydpc419\KF2_ATSB";
 
                 BackgroundWorker = new System.Threading.Thread(new System.Threading.ThreadStart(thread));
                 Running = true;

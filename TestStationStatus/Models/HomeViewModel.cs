@@ -9,6 +9,8 @@ namespace TestStationStatus.Models
     {
         public HttpPostedFileBase[] filesA;
         public HttpPostedFileBase[] filesB;
+        public HttpPostedFileBase[] filesA2;
+        public HttpPostedFileBase[] filesB2;
 
         public HomeViewModel()
         {
@@ -19,6 +21,8 @@ namespace TestStationStatus.Models
         {
             filesA = model.filesA;
             filesB = model.filesB;
+            filesA2 = model.filesA2;
+            filesB2 = model.filesB2;
         }
 
 
