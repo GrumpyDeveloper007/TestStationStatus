@@ -18,11 +18,11 @@ namespace TestStationStatus.Controllers
 
         private static StatusViewModel _model;
 
-        public StatusBController()
+        public StatusBController(RefreshClientService dataUpdatedClient)
         {
             _localDataService = PoorMansIOC.GetLocalTestDataService(1); // TODO: replace with IOC container
             _localDataService.WorkingFolder = @"C:\kf2_atsB";
-            _dataUpdatedClient = PoorMansIOC.GetRefreshDataService();
+            _dataUpdatedClient = dataUpdatedClient;
         }
 
         protected override void Dispose(bool disposing)

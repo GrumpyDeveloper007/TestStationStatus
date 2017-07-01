@@ -12,9 +12,9 @@ namespace TestStationStatus.Controllers
     {
         ServerDataService _ServerDataService;
 
-        public TestStationDataController()
+        public TestStationDataController(ServerDataService serverDataService)
         {
-            _ServerDataService = PoorMansIOC.GetServerDataService();
+            _ServerDataService = serverDataService;
         }
 
 

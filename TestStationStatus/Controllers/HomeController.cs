@@ -14,9 +14,10 @@ namespace TestStationStatus.Controllers
 
         RefreshClientService _dataUpdatedClient;
 
-        public HomeController()
+        public HomeController(RefreshClientService refreshClientService)
         {
-            _dataUpdatedClient = PoorMansIOC.GetRefreshDataService();
+            _dataUpdatedClient = refreshClientService;
+            //_dataUpdatedClient = PoorMansIOC.GetRefreshDataService();
         }
 
         public ActionResult Index()

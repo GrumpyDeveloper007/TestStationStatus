@@ -25,6 +25,12 @@ namespace TestStationStatusInfrastructure.Service
         ServerDataService _ServerDataService;
         IHubConnectionContext<IMonitorHub> _MonitorHub;
 
+
+        public RefreshClientService(ServerDataService serverDataService)
+        {
+            _ServerDataService = serverDataService;
+        }
+
         public System.Threading.Thread BackgroundWorker { get; set; }
 
         public bool Running { get; set; }
@@ -64,6 +70,7 @@ namespace TestStationStatusInfrastructure.Service
             if (newList.Count != oldList.Count)
                 return true;
             for (int i = 0; i < newList.Count; i++)
+
             {
                 if (newList[i] != oldList[i])
                 {
@@ -149,7 +156,7 @@ namespace TestStationStatusInfrastructure.Service
                 var context = GlobalHost.ConnectionManager.GetHubContext<MonitorHub, IMonitorHub>();
                 _MonitorHub = context.Clients;
 
-                _ServerDataService = PoorMansIOC.GetServerDataService();
+                //_ServerDataService = PoorMansIOC.GetServerDataService();
 
                 var ip = PoorMansIOC.GetIpAddressService();
                 var pcs = _ServerDataService.GetReverseDNSFailsAsList();

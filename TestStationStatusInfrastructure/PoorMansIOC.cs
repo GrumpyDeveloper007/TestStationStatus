@@ -12,8 +12,6 @@ namespace TestStationStatusInfrastructure
     public static class PoorMansIOC
     {
         private static List<LocalTestDataService> _LocalData=new List<LocalTestDataService> ();
-        private static ServerDataService _SingleInstanceServerData;
-        private static RefreshClientService _SingleInstanceRefreshData;
         private static IpAddressService _SingleInstanceIpAddressService;
 
         private static string[] IpLoopUpsToTry={ "INDELPC217", "INDELNB352" };
@@ -40,25 +38,5 @@ namespace TestStationStatusInfrastructure
             }
             return _LocalData[index];
         }
-
-        public static ServerDataService GetServerDataService()
-        {
-            if (_SingleInstanceServerData == null)
-            {
-                _SingleInstanceServerData = new ServerDataService(new TestStationContextFactory ());
-            }
-            return _SingleInstanceServerData;
-        }
-
-        public static RefreshClientService GetRefreshDataService()
-        {
-            if (_SingleInstanceRefreshData == null)
-            {
-                _SingleInstanceRefreshData = new RefreshClientService();
-            }
-            return _SingleInstanceRefreshData;
-        }
-
-
     }
 }

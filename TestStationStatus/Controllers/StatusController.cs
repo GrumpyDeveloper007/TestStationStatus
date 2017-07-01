@@ -19,10 +19,10 @@ namespace TestStationStatus.Controllers
 
         private static StatusViewModel _model;
 
-        public StatusController()
+        public StatusController(RefreshClientService dataUpdatedClient)
         {
             _localDataService = PoorMansIOC.GetLocalTestDataService(0); // TODO: replace with IOC container
-            _dataUpdatedClient = PoorMansIOC.GetRefreshDataService();
+            _dataUpdatedClient = dataUpdatedClient;
         }
 
         protected override void Dispose(bool disposing)

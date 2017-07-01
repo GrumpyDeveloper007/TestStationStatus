@@ -79,49 +79,88 @@
         <h2>Test Case queueing</h2>
 
         <div>
-            <p>418 A</p>
             @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data", test = Model }))
             {
                 @Html.Hidden("id", 0)
-                <p id="statusA">*Loading*</p>
-                <p id="currentScriptA">*Loading*</p>
-                <p>
-                    @Html.TextBoxFor(m => m.filesA, new { type = "file", name = "file", multiple = "multiple" })
-                    <input type="submit" value="Queue A" />
-                </p>
+                <table border="1">
+                    <tr>418 A</tr>
+                    <tr>
+                        <td colspan="2" id="statusA">*Loading*</td>
+                    </tr>
+                    <tr>
+                        <td>Current Script:</td>
+                        <td id="currentScriptA">*Loading*</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.TextBoxFor(m => m.filesA2, new { type = "file", name = "file", multiple = "multiple" })
+
+                        </td>
+                        <td><input type="submit" value="Queue Test Case" /></td>
+                    </tr>
+                </table>
             }
-            <p>418 B</p>
             @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.Hidden("id", 1)
-                <p id="statusB">*Loading*</p>
-                <p id="currentScriptB">*Loading*</p>
-                <p>
-                    @Html.TextBoxFor(m => m.filesB, new { type = "file", name = "file", multiple = "multiple" })
-                    <input type="submit" value="Queue B" />
-                </p>
+                <table border="1">
+                    <tr>418 B</tr>
+                    <tr>
+                        <td colspan="2" id="statusB">*Loading*</td>
+                    </tr>
+                    <tr>
+                        <td>Current Script:</td>
+                        <td id="currentScriptB">*Loading*</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.TextBoxFor(m => m.filesA2, new { type = "file", name = "file", multiple = "multiple" })
+
+                        </td>
+                        <td><input type="submit" value="Queue Test Case" /></td>
+                    </tr>
+                </table>
             }
-            <p>419 A</p>
             @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.Hidden("id", 2)
-                <p id="statusA2">*Loading*</p>
-                <p id="currentScriptA2">*Loading*</p>
-                <p>
-                    @Html.TextBoxFor(m => m.filesA2, new { type = "file", name = "file", multiple = "multiple" })
-                    <input type="submit" value="Queue A" />
-                </p>
+                <table border="1">
+                    <tr>419 A</tr>
+                    <tr>
+                    <td colspan="2" id="statusA2">*Loading*</td></tr>
+                    <tr>
+                        <td>Current Script:</td>
+                        <td id="currentScriptA2">*Loading*</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.TextBoxFor(m => m.filesA2, new { type = "file", name = "file", multiple = "multiple" })
+                            
+                        </td>
+                        <td><input type="submit" value="Queue Test Case" /></td>
+                    </tr>
+                </table>
             }
-            <p>419 B</p>
             @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.Hidden("id", 3)
-                <p id="statusB2">*Loading*</p>
-                <p id="currentScriptB2">*Loading*</p>
-                <p>
-                    @Html.TextBoxFor(m => m.filesB2, new { type = "file", name = "file", multiple = "multiple" })
-                    <input type="submit" value="Queue B" />
-                </p>
+                <table border="1">
+                    <tr>419 B</tr>
+                    <tr>
+                        <td colspan="2" id="statusB2">*Loading*</td>
+                    </tr>
+                    <tr>
+                        <td>Current Script:</td>
+                        <td id="currentScriptB2">*Loading*</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.TextBoxFor(m => m.filesA2, new { type = "file", name = "file", multiple = "multiple" })
+
+                        </td>
+                        <td><input type="submit" value="Queue Test Case" /></td>
+                    </tr>
+                </table>
             }
         </div>
     </div>
