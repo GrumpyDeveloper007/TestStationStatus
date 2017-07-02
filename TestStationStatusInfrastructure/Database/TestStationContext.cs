@@ -21,7 +21,10 @@ namespace TestStationStatusInfrastructure.Database
         public DbSet<CompletedTest> CompletedTests { get; set; }
         public DbSet<TestDuration> TestDuration { get; set; }
         public DbSet<ReverseDNSFail> ReverseDNSFails { get; set; }
-        
+
+        public TestStationContext(): base ("name=TestDB")
+            {}
+         
 
         public override int SaveChanges()
         {
