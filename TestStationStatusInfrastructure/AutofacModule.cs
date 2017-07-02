@@ -18,11 +18,13 @@ namespace TestStationStatusInfrastructure
             base.Load(builder);
             var assemblyToScan = new[] { ThisAssembly };
 
+            string[] IpLoopUpsToTry = { "INDELPC217", "INDELNB352" };
 
             builder.RegisterType<RefreshClientService>().SingleInstance();
             builder.RegisterType<TestStationContextFactory>().SingleInstance();
             builder.RegisterType<ServerDataService>().SingleInstance();
-
+            builder.RegisterType<LocalTestDataService>().InstancePerRequest();
+            builder.Register(c => new IpAddressService(IpLoopUpsToTry));
         }
     }
 }

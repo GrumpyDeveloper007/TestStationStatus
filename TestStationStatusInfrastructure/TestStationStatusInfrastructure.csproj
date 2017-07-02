@@ -121,7 +121,6 @@
     <Compile Include="Database\TestStationContextFactory.cs" />
     <Compile Include="Hubs\IMonitorHub.cs" />
     <Compile Include="Hubs\MonitorHub.cs" />
-    <Compile Include="PoorMansIOC.cs" />
     <Compile Include="Service\IpAddressService.cs" />
     <Compile Include="Service\LocalTestDataService.cs" />
     <Compile Include="Service\RefreshClientService.cs" />

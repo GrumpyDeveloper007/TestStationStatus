@@ -13,17 +13,29 @@ namespace TestStationStatus.Controllers
     {
 
         RefreshClientService _dataUpdatedClient;
+        LocalTestDataService _LocalTestDataServiceA1;
+        LocalTestDataService _LocalTestDataServiceB1;
+        LocalTestDataService _LocalTestDataServiceA2;
+        LocalTestDataService _LocalTestDataServiceB2;
 
-        public HomeController(RefreshClientService refreshClientService)
+        public HomeController(RefreshClientService refreshClientService, 
+            LocalTestDataService localTestDataServiceA1,
+        LocalTestDataService localTestDataServiceB1,
+        LocalTestDataService localTestDataServiceA2,
+        LocalTestDataService localTestDataServiceB2)
         {
             _dataUpdatedClient = refreshClientService;
-            //_dataUpdatedClient = PoorMansIOC.GetRefreshDataService();
+            _LocalTestDataServiceA1 = localTestDataServiceA1;
+            _LocalTestDataServiceB1 = localTestDataServiceB1;
+            _LocalTestDataServiceA2 = localTestDataServiceA2;
+            _LocalTestDataServiceB2 = localTestDataServiceB2;
         }
 
         public ActionResult Index()
         {
             if (_dataUpdatedClient.BackgroundWorker == null)
             {
+                //new List<LocalTestDataService> { _LocalTestDataServiceA1, _LocalTestDataServiceB1, _LocalTestDataServiceA2, _LocalTestDataServiceB2 }
                 _dataUpdatedClient.StartService();
             }
 

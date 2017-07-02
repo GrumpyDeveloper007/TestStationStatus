@@ -21,14 +21,16 @@ namespace TestStationStatusInfrastructure.Service
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         const int _RefreshDataIntervalMs = 10000;
 
-        List<LocalTestDataService> _localDataService;
+        List<LocalTestDataService> _localDataService= new List<LocalTestDataService>();
         ServerDataService _ServerDataService;
+        IpAddressService _IpAddressService;
         IHubConnectionContext<IMonitorHub> _MonitorHub;
 
 
-        public RefreshClientService(ServerDataService serverDataService)
+        public RefreshClientService(ServerDataService serverDataService, IpAddressService ipAddressService)
         {
             _ServerDataService = serverDataService;
+            _IpAddressService = ipAddressService;
         }
 
         public System.Threading.Thread BackgroundWorker { get; set; }
@@ -156,30 +158,34 @@ namespace TestStationStatusInfrastructure.Service
                 var context = GlobalHost.ConnectionManager.GetHubContext<MonitorHub, IMonitorHub>();
                 _MonitorHub = context.Clients;
 
-                //_ServerDataService = PoorMansIOC.GetServerDataService();
-
-                var ip = PoorMansIOC.GetIpAddressService();
                 var pcs = _ServerDataService.GetReverseDNSFailsAsList();
-                ip.UpdateLoopUpsToTry(pcs.ToArray());
+                _IpAddressService.UpdateLoopUpsToTry(pcs.ToArray());
 
-                _localDataService = PoorMansIOC.GetLocalTestDataServices();
-
-                var localDataServiceA = PoorMansIOC.GetLocalTestDataService(0); // TODO: replace with IOC container
+                var localDataServiceA = GetLocalTestDataService(0); 
                 localDataServiceA.WorkingFolder = @"\\ausydpc418\KF2_ATS";
 
-                var localDataServiceB = PoorMansIOC.GetLocalTestDataService(1); // TODO: replace with IOC container
+                var localDataServiceB = GetLocalTestDataService(1); 
                 localDataServiceB.WorkingFolder = @"\\ausydpc418\KF2_ATSB";
 
-                var localDataServiceA2 = PoorMansIOC.GetLocalTestDataService(2); // TODO: replace with IOC container
+                var localDataServiceA2 = GetLocalTestDataService(2);
                 localDataServiceA2.WorkingFolder = @"\\ausydpc419\KF2_ATS";
 
-                var localDataServiceB2 = PoorMansIOC.GetLocalTestDataService(3); // TODO: replace with IOC container
+                var localDataServiceB2 = GetLocalTestDataService(3);
                 localDataServiceB2.WorkingFolder = @"\\ausydpc419\KF2_ATSB";
 
                 BackgroundWorker = new System.Threading.Thread(new System.Threading.ThreadStart(thread));
                 Running = true;
                 BackgroundWorker.Start();
             }
+        }
+
+        public LocalTestDataService GetLocalTestDataService(int index)
+        {
+            while (_localDataService.Count <= index)
+            {
+                _localDataService.Add(new LocalTestDataService(_IpAddressService));
+            }
+            return _localDataService[index];
         }
     }
 }
