@@ -68,7 +68,7 @@ namespace TestStationStatus.Controllers
         }
 
         // GET: Status
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
             if (_model == null)
             {
@@ -79,24 +79,9 @@ namespace TestStationStatus.Controllers
             {
                 _dataUpdatedClient.StartService();
             }
-
-
-            var model = _localDataService.GetModelFromLocalFiles();
-            _model = new StatusViewModel(model);
-
-            return View(_model);
-        }
-
-        public ActionResult Status()
-        {
-            if (_model == null)
+            if (id.HasValue)
             {
-                _model = new StatusViewModel();
-            }
-
-            if (_dataUpdatedClient.BackgroundWorker == null)
-            {
-                _dataUpdatedClient.StartService();
+                _localDataService = _dataUpdatedClient.GetLocalTestDataService(id.Value);
             }
 
 
@@ -105,6 +90,5 @@ namespace TestStationStatus.Controllers
 
             return View(_model);
         }
-
     }
 }

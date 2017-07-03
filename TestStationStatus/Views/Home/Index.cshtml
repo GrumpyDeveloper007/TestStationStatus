@@ -99,8 +99,10 @@
             <h2>Status Page @Environment.MachineName</h2>
             <p>
             </p>
-            <p><a class="btn btn-test" href="~/status">Status Page</a></p>
-            <p><a class="btn btn-test" href="~/statusB">Status Page B</a></p>
+            <p><a class="btn btn-test" onclick="location.href='@Url.Action("Index", "Status")?id=0'">Status Page 418 A</a></p>
+            <p><a class="btn btn-test" onclick="location.href='@Url.Action("Index", "Status")?id=1'">Status Page 418 B</a></p>
+            <p><a class="btn btn-test" onclick="location.href='@Url.Action("Index", "Status")?id=2'">Status Page 419 A</a></p>
+            <p><a class="btn btn-test" onclick="location.href='@Url.Action("Index", "Status")?id=3'">Status Page 419 B</a></p>
             <p><a href="http://ausydvs25:8181/project.html?projectId=Embedded_E420_AutoTest&tab=projectOverview">Team City Results Data</a></p>
 
             <p><a href="https://landisgyr.atlassian.net/secure/RapidBoard.jspa?rapidView=39&projectKey=ATS&view=detail&selectedIssue=ATS-809">JIRA Board</a></p>

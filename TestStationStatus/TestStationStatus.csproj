@@ -236,7 +236,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CompletedTestsController.cs" />
-    <Compile Include="Controllers\StatusBController.cs" />
     <Compile Include="Controllers\TestStationDataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -581,9 +580,6 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Status\Index.cshtml" />
-    <Content Include="Views\StatusB\Index.cshtml" />
-    <Content Include="Views\Status\Status.cshtml" />
-    <Content Include="Views\StatusB\Status.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
