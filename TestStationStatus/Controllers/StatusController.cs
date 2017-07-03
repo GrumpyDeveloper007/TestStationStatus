@@ -31,8 +31,6 @@ namespace TestStationStatus.Controllers
         {
             if (disposing)
             {
-                //System.IO.File.AppendAllText(@"C:\kf2_ats\weblog.txt", DateTime.Now.ToString("hh:mm:ss.fff") + "controller destroyed\r\n");
-                //_dataUpdatedClient.Running = false;
             }
 
             base.Dispose(disposing);

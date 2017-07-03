@@ -50,122 +50,159 @@
 
 
 <style type="text/css">
+.image-cog
+{
+    background-image:  linear-gradient(to bottom, rgba(0,255,0,0.1), rgba(0,0,0,0.1)),
+     URL('/img/LargeWhiteCogs.png');
+    background-size :100% 100%  ;
+    background-blend-mode: overlay;
+    background-repeat: no-repeat;
+    background-position-x :0;
+    background-position-y :0;
+    float:left,right;
+}
+
+.image-Status
+{
+    background-image:  linear-gradient(to bottom, rgba(0,255,0,0.1), rgba(0,0,0,0.1)),
+     URL('/img/LargeWhiteInformation.png');
+    background-size :100% 100%  ;
+    background-blend-mode: overlay;
+    background-repeat: no-repeat;
+    float:left,right;
+    height :100%;
+}
+
+.image-header
+{
+    border-width :0;
+    width :100%;
+}
+
 .btn-test {
   color: #333333;
-  background-color: #ffffff;
   border-color: #cccccc;
-  background-image:url('../../img/LargeWhiteCogs.png');
+  background-image:linear-gradient(to bottom, rgba(255,255,0,1), rgba(200,200,0,1))
+      ;
+    background-blend-mode: overlay;
+    background-size :100% 100%  ;
   width :200px;
   height:50px;
 }
 </style>
 
-<img src="~/img/maxresdefault.jpg" width="800" height="100" />
+<div>
+<img class="image-header" src="~/img/maxresdefault.jpg" width="100%" height="100" />
 
-<div class="row">
-    <div class="col-md-6">
-        <h2>Status Page @Environment.MachineName</h2>
-        <p>
-        </p>
-        <p><a class="btn btn-test"  href="~/status" >Status Page</a></p>
-        <p><a class="btn btn-test" href="~/statusB">Status Page B</a></p>
-    </div>
-<!--    <div class="col-md-4">
-        <h2>Test Case reporting</h2>
-        <p></p>
-        <p><a class="btn btn-default" href="~/Views/Status/Index.cshtml">Test link</a></p>
-    </div>-->
-    <div class="col-md-6">
-        <h2>Test Case queueing</h2>
+    <div class="row">
+        <div class="col-md-6 image-Status">
+            <h2>Status Page @Environment.MachineName</h2>
+            <p>
+            </p>
+            <p><a class="btn btn-test" href="~/status">Status Page</a></p>
+            <p><a class="btn btn-test" href="~/statusB">Status Page B</a></p>
+            <p><a href="http://ausydvs25:8181/project.html?projectId=Embedded_E420_AutoTest&tab=projectOverview">Team City Results Data</a></p>
 
-        <div>
-            @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data", test = Model }))
-            {
-                @Html.Hidden("id", 0)
-                <table border="1">
-                    <tr>418 A</tr>
-                    <tr>
-                        <td colspan="2" id="statusA">*Loading*</td>
-                    </tr>
-                    <tr>
-                        <td>Current Script:</td>
-                        <td id="currentScriptA">*Loading*</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.TextBoxFor(m => m.filesA2, new { type = "file", name = "file", multiple = "multiple" })
-
-                        </td>
-                        <td><input type="submit" value="Queue Test Case" /></td>
-                    </tr>
-                </table>
-            }
-            @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
-                @Html.Hidden("id", 1)
-                <table border="1">
-                    <tr>418 B</tr>
-                    <tr>
-                        <td colspan="2" id="statusB">*Loading*</td>
-                    </tr>
-                    <tr>
-                        <td>Current Script:</td>
-                        <td id="currentScriptB">*Loading*</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.TextBoxFor(m => m.filesA2, new { type = "file", name = "file", multiple = "multiple" })
-
-                        </td>
-                        <td><input type="submit" value="Queue Test Case" /></td>
-                    </tr>
-                </table>
-            }
-            @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
-                @Html.Hidden("id", 2)
-                <table border="1">
-                    <tr>419 A</tr>
-                    <tr>
-                    <td colspan="2" id="statusA2">*Loading*</td></tr>
-                    <tr>
-                        <td>Current Script:</td>
-                        <td id="currentScriptA2">*Loading*</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.TextBoxFor(m => m.filesA2, new { type = "file", name = "file", multiple = "multiple" })
-                            
-                        </td>
-                        <td><input type="submit" value="Queue Test Case" /></td>
-                    </tr>
-                </table>
-            }
-            @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
-                @Html.Hidden("id", 3)
-                <table border="1">
-                    <tr>419 B</tr>
-                    <tr>
-                        <td colspan="2" id="statusB2">*Loading*</td>
-                    </tr>
-                    <tr>
-                        <td>Current Script:</td>
-                        <td id="currentScriptB2">*Loading*</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.TextBoxFor(m => m.filesA2, new { type = "file", name = "file", multiple = "multiple" })
-
-                        </td>
-                        <td><input type="submit" value="Queue Test Case" /></td>
-                    </tr>
-                </table>
-            }
+            <p><a href="https://landisgyr.atlassian.net/secure/RapidBoard.jspa?rapidView=39&projectKey=ATS&view=detail&selectedIssue=ATS-809">JIRA Board</a></p>
         </div>
+        <!--    <div class="col-md-4">
+                <h2>Test Case reporting</h2>
+                <p></p>
+                <p><a class="btn btn-default" href="~/Views/Status/Index.cshtml">Test link</a></p>
+            </div>-->
+        <div class="col-md-6 image-cog">
+            <h2>Test Case queueing</h2>
+
+            <div class="">
+                @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data", test = Model }))
+            {
+                    @Html.Hidden("id", 0)
+                    <table border="1">
+                        <tr>418 A</tr>
+                        <tr>
+                            <td colspan="2" id="statusA">*Loading*</td>
+                        </tr>
+                        <tr>
+                            <td>Current Script:</td>
+                            <td id="currentScriptA">*Loading*</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.TextBoxFor(m => m.filesA2, new { type = "file", name = "file", multiple = "multiple" })
+
+                            </td>
+                            <td><input type="submit" value="Queue Test Case" /></td>
+                        </tr>
+                    </table>
+                }
+                @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                    @Html.Hidden("id", 1)
+                    <table border="1">
+                        <tr>418 B</tr>
+                        <tr>
+                            <td colspan="2" id="statusB">*Loading*</td>
+                        </tr>
+                        <tr>
+                            <td>Current Script:</td>
+                            <td id="currentScriptB">*Loading*</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.TextBoxFor(m => m.filesA2, new { type = "file", name = "file", multiple = "multiple" })
+
+                            </td>
+                            <td><input type="submit" value="Queue Test Case" /></td>
+                        </tr>
+                    </table>
+                }
+                @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                    @Html.Hidden("id", 2)
+                    <table border="1">
+                        <tr>419 A</tr>
+                        <tr>
+                            <td colspan="2" id="statusA2">*Loading*</td>
+                        </tr>
+                        <tr>
+                            <td>Current Script:</td>
+                            <td id="currentScriptA2">*Loading*</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.TextBoxFor(m => m.filesA2, new { type = "file", name = "file", multiple = "multiple" })
+
+                            </td>
+                            <td><input type="submit" value="Queue Test Case" /></td>
+                        </tr>
+                    </table>
+                }
+                @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                    @Html.Hidden("id", 3)
+                    <table border="1">
+                        <tr>419 B</tr>
+                        <tr>
+                            <td colspan="2" id="statusB2">*Loading*</td>
+                        </tr>
+                        <tr>
+                            <td>Current Script:</td>
+                            <td id="currentScriptB2">*Loading*</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.TextBoxFor(m => m.filesA2, new { type = "file", name = "file", multiple = "multiple" })
+
+                            </td>
+                            <td><input type="submit" value="Queue Test Case" /></td>
+                        </tr>
+                    </table>
+                }
+            </div>
+        </div>
+
+        <!-- <iframe id="status1" width="800" height="800" src="~/status/Status" name="targetframe" allowTransparency="true" scrolling="no" frameborder="0"></iframe>
+         <iframe id="status2" width="800" height="800" src="~/statusB/status" name="targetframe" allowTransparency="true" scrolling="no" frameborder="0"></iframe>
+            -->
+
     </div>
-
-       <!-- <iframe id="status1" width="800" height="800" src="~/status/Status" name="targetframe" allowTransparency="true" scrolling="no" frameborder="0"></iframe>
-        <iframe id="status2" width="800" height="800" src="~/statusB/status" name="targetframe" allowTransparency="true" scrolling="no" frameborder="0"></iframe>
-           -->
-
