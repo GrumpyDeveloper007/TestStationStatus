@@ -53,7 +53,7 @@
 .image-cog
 {
     background-image:  linear-gradient(to bottom, rgba(0,255,0,0.1), rgba(0,0,0,0.1)),
-     URL('/img/LargeWhiteCogs.png');
+     URL('img/LargeWhiteCogs.png');
     background-size :100% 100%  ;
     background-blend-mode: overlay;
     background-repeat: no-repeat;
@@ -65,7 +65,7 @@
 .image-Status
 {
     background-image:  linear-gradient(to bottom, rgba(0,255,0,0.1), rgba(0,0,0,0.1)),
-     URL('/img/LargeWhiteInformation.png');
+     URL('img/LargeWhiteInformation.png');
     background-size :100% 100%  ;
     background-blend-mode: overlay;
     background-repeat: no-repeat;
@@ -78,6 +78,7 @@
     border-width :0;
     width :100%;
 }
+
 
 .btn-test {
   color: #333333;
@@ -95,24 +96,25 @@
 <img class="image-header" src="~/img/maxresdefault.jpg" width="100%" height="100" />
 
     <div class="row">
-        <div class="col-md-6 image-Status">
+        <div class="col-md-4 image-Status">
             <h2>Status Page @Environment.MachineName</h2>
-            <p>
-            </p>
+            <p> </p>
+            <p>Hold CRTL to open in a new tab</p>
             <p><a class="btn btn-test" onclick="location.href='@Url.Action("Index", "Status")?id=0'">Status Page 418 A</a></p>
             <p><a class="btn btn-test" onclick="location.href='@Url.Action("Index", "Status")?id=1'">Status Page 418 B</a></p>
             <p><a class="btn btn-test" onclick="location.href='@Url.Action("Index", "Status")?id=2'">Status Page 419 A</a></p>
             <p><a class="btn btn-test" onclick="location.href='@Url.Action("Index", "Status")?id=3'">Status Page 419 B</a></p>
+            <p> </p>
             <p><a href="http://ausydvs25:8181/project.html?projectId=Embedded_E420_AutoTest&tab=projectOverview">Team City Results Data</a></p>
 
-            <p><a href="https://landisgyr.atlassian.net/secure/RapidBoard.jspa?rapidView=39&projectKey=ATS&view=detail&selectedIssue=ATS-809">JIRA Board</a></p>
+            <p><a href="https://landisgyr.atlassian.net/secure/RapidBoard.jspa?rapidView=39&projectKey=ATS&view=detail">JIRA Board</a></p>
         </div>
         <!--    <div class="col-md-4">
                 <h2>Test Case reporting</h2>
                 <p></p>
                 <p><a class="btn btn-default" href="~/Views/Status/Index.cshtml">Test link</a></p>
             </div>-->
-        <div class="col-md-6 image-cog">
+        <div class="col-md-8 image-cog">
             <h2>Test Case queueing</h2>
 
             <div class="">
@@ -125,7 +127,7 @@
                             <td colspan="2" id="statusA">*Loading*</td>
                         </tr>
                         <tr>
-                            <td>Current Script:</td>
+                            <td>Current( or last) Script:</td>
                             <td id="currentScriptA">*Loading*</td>
                         </tr>
                         <tr>
@@ -146,7 +148,7 @@
                             <td colspan="2" id="statusB">*Loading*</td>
                         </tr>
                         <tr>
-                            <td>Current Script:</td>
+                            <td>Current( or last) Script:</td>
                             <td id="currentScriptB">*Loading*</td>
                         </tr>
                         <tr>
@@ -158,6 +160,7 @@
                         </tr>
                     </table>
                 }
+                <p> </p>
                 @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                     @Html.Hidden("id", 2)
@@ -167,7 +170,7 @@
                             <td colspan="2" id="statusA2">*Loading*</td>
                         </tr>
                         <tr>
-                            <td>Current Script:</td>
+                            <td>Current( or last) Script:</td>
                             <td id="currentScriptA2">*Loading*</td>
                         </tr>
                         <tr>
@@ -188,7 +191,7 @@
                             <td colspan="2" id="statusB2">*Loading*</td>
                         </tr>
                         <tr>
-                            <td>Current Script:</td>
+                            <td>Current( or last) Script:</td>
                             <td id="currentScriptB2">*Loading*</td>
                         </tr>
                         <tr>
