@@ -52,6 +52,12 @@ namespace TestStationStatus.Controllers
             return Redirect(Request.UrlReferrer.ToString());
         }
 
+        public ActionResult Cancel(int id, HomeViewModel test)
+        {
+            _dataUpdatedClient.KillCurrentTestCase(id);
+            return Redirect(Request.UrlReferrer.ToString());
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

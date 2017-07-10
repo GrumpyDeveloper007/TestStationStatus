@@ -140,6 +140,11 @@ namespace TestStationStatusInfrastructure.Service
             }
         }
 
+        public void KillCurrentTestCase(int index)
+        {
+            _localDataService[index].KillCurrentTestCase();
+        }
+
         public void UploadFile(int index, HttpFileCollectionBase files, string IP)
         {
             // Verify that the user selected a file
