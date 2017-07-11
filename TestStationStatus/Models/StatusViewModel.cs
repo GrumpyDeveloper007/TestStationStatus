@@ -8,6 +8,7 @@ namespace TestStationStatus.Models
 {
     public class StatusViewModel
     {
+        public string PCName { get; set; }
         public string Name { get; set; }
         public string ApplicationStatus { get; set; }
         public string LastUpdateTime { get; set; }

@@ -84,9 +84,28 @@ namespace TestStationStatus.Controllers
                 _localDataService = _dataUpdatedClient.GetLocalTestDataService(id.Value);
             }
 
-
             var model = _localDataService.GetModelFromLocalFiles();
             _model = new StatusViewModel(model);
+
+            _model.PCName = Environment.MachineName;
+            if (id.HasValue)
+            {
+                switch (id.Value)
+                {
+                    case 0:
+                        _model.PCName = "418A";
+                        break;
+                    case 1:
+                        _model.PCName = "418B";
+                        break;
+                    case 2:
+                        _model.PCName = "419A";
+                        break;
+                    case 3:
+                        _model.PCName = "419B";
+                        break;
+                }
+            }
 
             return View(_model);
         }

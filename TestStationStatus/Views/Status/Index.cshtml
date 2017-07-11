@@ -96,7 +96,7 @@
         ViewBag.Title = "Index";
     }
 
-    <h2>StatusView - @Environment.MachineName</h2>
+    <h2>StatusView - @Model.PCName</h2>
 
     <p>
         <input type="button" title="Cancel current test case" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Status")'" />
