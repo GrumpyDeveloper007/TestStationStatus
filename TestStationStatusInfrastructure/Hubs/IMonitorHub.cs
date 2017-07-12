@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using TestStationStatusInfrastructure.HubPayload;
 
 namespace TestStationStatusInfrastructure.Hubs
 {
@@ -8,8 +9,7 @@ namespace TestStationStatusInfrastructure.Hubs
         Task OnDisconnected(bool stopCalled);
         Task OnReconnected();
         void refreshPage();
-        void Updated(string statusA, string currentScriptA, string statusB, string currentScriptB
-           , string statusA2, string currentScriptA2, string statusB2, string currentScriptB2);
+        void HomeUpdated(HomeScreenUpdate newStatus);
         void statusBUpdated(string status);
     }
 }

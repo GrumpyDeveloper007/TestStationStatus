@@ -119,6 +119,8 @@
     <Compile Include="AutofacModule.cs" />
     <Compile Include="Database\DbSetExtension.cs" />
     <Compile Include="Database\TestStationContextFactory.cs" />
+    <Compile Include="HubPayload\HomeScreenUpdate.cs" />
+    <Compile Include="HubPayload\HomeScreenStationStatus.cs" />
     <Compile Include="Hubs\IMonitorHub.cs" />
     <Compile Include="Hubs\MonitorHub.cs" />
     <Compile Include="Service\IpAddressService.cs" />

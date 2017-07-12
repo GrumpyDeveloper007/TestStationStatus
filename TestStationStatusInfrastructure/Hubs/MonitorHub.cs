@@ -5,6 +5,7 @@ using System.Web;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using System.Threading.Tasks;
+using TestStationStatusInfrastructure.HubPayload;
 
 namespace TestStationStatusInfrastructure.Hubs
 {
@@ -18,10 +19,9 @@ namespace TestStationStatusInfrastructure.Hubs
             Clients.All.refreshPage();
         }
 
-        public void Updated(string statusA, string currentScriptA, string statusB, string currentScriptB,
-            string statusA2, string currentScriptA2, string statusB2, string currentScriptB2)
+        public void HomeUpdated(HomeScreenUpdate newStatus)
         {
-            Clients.All.statusAUpdated(statusA, currentScriptA, statusB, currentScriptB, statusA2, currentScriptA2, statusB2, currentScriptB2);
+            Clients.All.statusAUpdated(newStatus);
         }
 
         public void statusBUpdated(string status)

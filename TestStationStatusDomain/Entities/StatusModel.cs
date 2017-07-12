@@ -37,6 +37,11 @@ namespace TestStationStatus.Models
             MonitorDurationKnown = true;
         }
 
+        public string GetStatusMessage ()
+        {
+            return ApplicationStatus + ", queue : " + (MonitorFiles.Count() + QueueItems.Count()) + " Free to run a new test in : " + TimeUntilStationIsFreeString;
+        }
+
         public string LastUpdateTimeString
         {
             get

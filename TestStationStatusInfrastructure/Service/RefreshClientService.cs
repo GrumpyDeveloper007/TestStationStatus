@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using TestStationStatus.Models;
 using TestStationStatusDomain.Entities;
+using TestStationStatusInfrastructure.HubPayload;
 using TestStationStatusInfrastructure.Hubs;
 
 namespace TestStationStatusInfrastructure.Service
@@ -93,14 +94,12 @@ namespace TestStationStatusInfrastructure.Service
                 SaveDuration(model);
             }
 
-            //if (IsListDifferent(modelA.MonitorFiles, _modelA.MonitorFiles))
-            model.MonitorDuration = CalculateDuration(model.MonitorFiles, ref model.MonitorDurationKnown);
-            //if (IsListDifferent(modelA.QueueItems, _modelA.QueueItems))
-            model.QueueDuration = CalculateDuration(model.QueueItems, ref model.QueueDurationKnown);
-            //if (!string.IsNullOrWhiteSpace(modelA.TestScript))
-            model.TestScriptLastDuration = _ServerDataService.GetDurationOfTestCase(model.TestScript);
-
-
+            //if (IsListDifferent(model.MonitorFiles, oldModel.MonitorFiles))
+                model.MonitorDuration = CalculateDuration(model.MonitorFiles, ref model.MonitorDurationKnown);
+            //if (IsListDifferent(model.QueueItems, oldModel.QueueItems))
+                model.QueueDuration = CalculateDuration(model.QueueItems, ref model.QueueDurationKnown);
+            if (!string.IsNullOrWhiteSpace(model.TestScript))
+                model.TestScriptLastDuration = _ServerDataService.GetDurationOfTestCase(model.TestScript);
         }
 
         private void thread()
@@ -119,13 +118,20 @@ namespace TestStationStatusInfrastructure.Service
 
                     try
                     {
+                        var homeModel = new HomeScreenUpdate(_localDataService.Count());
 
+                        homeModel.Station[0].Name = "418A";
+                        homeModel.Station[1].Name = "418B";
+                        homeModel.Station[2].Name = "419A";
+                        homeModel.Station[3].Name = "419B";
 
-                        _MonitorHub.All.Updated(_localDataService[0].CurrentModel.ApplicationStatus + ", queue : " + (_localDataService[0].CurrentModel.MonitorFiles.Count() + _localDataService[0].CurrentModel.QueueItems.Count()) + " Free to run a new test in : " + _localDataService[0].CurrentModel.TimeUntilStationIsFreeString, _localDataService[0].CurrentModel.TestScript,
-                            _localDataService[1].CurrentModel.ApplicationStatus + ", queue : " + (_localDataService[1].CurrentModel.MonitorFiles.Count() + _localDataService[1].CurrentModel.QueueItems.Count()) + " Free to run a new test in : " + _localDataService[1].CurrentModel.TimeUntilStationIsFreeString, _localDataService[1].CurrentModel.TestScript,
-                            _localDataService[2].CurrentModel.ApplicationStatus + ", queue : " + (_localDataService[2].CurrentModel.MonitorFiles.Count() + _localDataService[2].CurrentModel.QueueItems.Count()) + " Free to run a new test in : " + _localDataService[2].CurrentModel.TimeUntilStationIsFreeString, _localDataService[2].CurrentModel.TestScript,
-                            _localDataService[3].CurrentModel.ApplicationStatus + ", queue : " + (_localDataService[3].CurrentModel.MonitorFiles.Count() + _localDataService[3].CurrentModel.QueueItems.Count()) + " Free to run a new test in : " + _localDataService[3].CurrentModel.TimeUntilStationIsFreeString, _localDataService[3].CurrentModel.TestScript
-                            );
+                        for (int i=0;i<_localDataService.Count();i++ )
+                        {
+                            homeModel.Station[i].Status = _localDataService[i].CurrentModel.GetStatusMessage();
+                            homeModel.Station[i].CurrentScript = _localDataService[i].CurrentModel.TestScript;
+                        }
+
+                        _MonitorHub.All.HomeUpdated(homeModel);
                     }
                     catch (Exception ex)
                     {

@@ -20,25 +20,30 @@
         var monitor;
 
         $(function () {
-            $.connection.hub.logging = true;
+            //$.connection.hub.logging = true;
 
             monitor = $.connection.monitorHub;
-            monitor.client.Updated = Updated;
+            monitor.client.HomeUpdated = HomeUpdated;
 
             $.connection.hub.start(); // Use parameter for debugging only { transport: 'longPolling' }
         });
 
-        function Updated(messagea, currentScripta, messageb, currentScriptb,
-            messagea2, currentScripta2, messageb2, currentScriptb2) {
-            $('#statusA').text(messagea);
-            $('#currentScriptA').text(currentScripta);
-            $('#statusB').text(messageb);
-            $('#currentScriptB').text(currentScriptb);
+        function HomeUpdated(homeModel) {
+            $('#Name0').text(homeModel.Station[0].Name);
+            $('#Name1').text(homeModel.Station[1].Name);
+            $('#Name2').text(homeModel.Station[2].Name);
+            $('#Name3').text(homeModel.Station[3].Name);
 
-            $('#statusA2').text(messagea2);
-            $('#currentScriptA2').text(currentScripta2);
-            $('#statusB2').text(messageb2);
-            $('#currentScriptB2').text(currentScriptb2);
+
+            $('#status0').text(homeModel.Station[0].Status);
+            $('#status1').text(homeModel.Station[1].Status);
+            $('#status2').text(homeModel.Station[2].Status);
+            $('#status3').text(homeModel.Station[3].Status);
+
+            $('#currentScript0').text(homeModel.Station[0].CurrentScript);
+            $('#currentScript1').text(homeModel.Station[1].CurrentScript);
+            $('#currentScript2').text(homeModel.Station[2].CurrentScript);
+            $('#currentScript3').text(homeModel.Station[3].CurrentScript);
         };
     </script>
 }
@@ -70,14 +75,14 @@
                 @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data", test = Model }))
             {
                     @Html.Hidden("id", 0)
-                    <p class="noMargin">418 A</p>
+                    <p id="Name0">418 A</p>
                         <table>
                             <tr>
-                                <td colspan="3" id="statusA">*Loading*</td>
+                                <td colspan="3" id="status0">*Loading*</td>
                             </tr>
                             <tr>
                                 <td>Current( or last) Script:</td>
-                                <td id="currentScriptA">*Loading*</td>
+                                <td id="currentScript0">*Loading*</td>
                                 <td><input class="btn btn-test" type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Home",new { id = 0 })'" /></td>
                             </tr>
                             <tr>
@@ -92,14 +97,14 @@
                 @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                     @Html.Hidden("id", 1)
-                    <p>418 B</p>
+                    <p id="Name1">418 B</p>
                         <table>
                             <tr>
-                                <td colspan="3" id="statusB">*Loading*</td>
+                                <td colspan="3" id="status1">*Loading*</td>
                             </tr>
                             <tr>
                                 <td>Current( or last) Script:</td>
-                                <td id="currentScriptB">*Loading*</td>
+                                <td id="currentScript1">*Loading*</td>
                                 <td><input class="btn btn-test" type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Home",new { id = 1 })'" /></td>
                             </tr>
                             <tr>
@@ -114,12 +119,12 @@
                 @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                     @Html.Hidden("id", 2)
-                    <p>419 A</p>
+                    <p id="Name2">419 A</p>
                         <table>
-                            <tr><td colspan="3" id="statusA2">*Loading*</td></tr>
+                            <tr><td colspan="3" id="status2">*Loading*</td></tr>
                             <tr>
                                 <td>Current( or last) Script:</td>
-                                <td id="currentScriptA2">*Loading*</td>
+                                <td id="currentScript2">*Loading*</td>
                                 <td><input class="btn btn-test" type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Home",new { id = 2 })'" /></td>
                             </tr>
                             <tr>
@@ -134,14 +139,14 @@
                 @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                     @Html.Hidden("id", 3)
-                    <p>419 B</p>
+                    <p id="Name3">419 B</p>
                         <table>
                             <tr>
-                                <td colspan="3" id="statusB2">*Loading*</td>
+                                <td colspan="3" id="status3">*Loading*</td>
                             </tr>
                             <tr>
                                 <td>Current( or last) Script:</td>
-                                <td id="currentScriptB2">*Loading*</td>
+                                <td id="currentScript3">*Loading*</td>
                                 <td><input class="btn btn-test" type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Home",new { id = 3 })'" /></td>
                             </tr>
                             <tr>
