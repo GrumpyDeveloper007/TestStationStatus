@@ -51,31 +51,33 @@
 
 
 <div>
-    <img class="image-header" src="~/Content/Images/maxresdefault.jpg" />
-
     <div class="row">
-        <div class="col-md-4 image-Status">
-            <h2>Status Page @Environment.MachineName</h2>
-            <p> </p>
-            <p>Hold CTRL to open in a new tab</p>
-            <p><a class="btn btn-status" href="@Url.Action("Index", "Status")?id=0">Status Page 418 A</a></p>
-            <p><a class="btn btn-status" href="@Url.Action("Index", "Status")?id=1">Status Page 418 B</a></p>
-            <p><a class="btn btn-status" href="@Url.Action("Index", "Status")?id=2">Status Page 419 A</a></p>
-            <p><a class="btn btn-status" href="@Url.Action("Index", "Status")?id=3">Status Page 419 B</a></p>
-            <p> </p>
-            <p><a href="http://ausydvs25:8181/project.html?projectId=Embedded_E420_AutoTest&tab=projectOverview">Team City Results Data</a></p>
-
-            <p><a href="https://landisgyr.atlassian.net/secure/RapidBoard.jspa?rapidView=39&projectKey=ATS&view=detail">JIRA Board</a></p>
+        <img class="image-header" src="~/Content/Images/maxresdefault.jpg" />
         </div>
 
-        <div class="col-md-8 image-cog">
-            <h2>Test Case queueing</h2>
+        <div class="row">
+            <div class="col-md-4 image-Status">
+                <h2>Status Page @Environment.MachineName</h2>
+                <p> </p>
+                <p>Hold CTRL to open in a new tab</p>
+                <p><a class="btn btn-status" href="@Url.Action("Index", "Status")?id=0">Status Page 418 A</a></p>
+                <p><a class="btn btn-status" href="@Url.Action("Index", "Status")?id=1">Status Page 418 B</a></p>
+                <p><a class="btn btn-status" href="@Url.Action("Index", "Status")?id=2">Status Page 419 A</a></p>
+                <p><a class="btn btn-status" href="@Url.Action("Index", "Status")?id=3">Status Page 419 B</a></p>
+                <p> </p>
+                <p><a href="http://ausydvs25:8181/project.html?projectId=Embedded_E420_AutoTest&tab=projectOverview">Team City Results Data</a></p>
 
-            <div class="">
-                @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data", test = Model }))
+                <p><a href="https://landisgyr.atlassian.net/secure/RapidBoard.jspa?rapidView=39&projectKey=ATS&view=detail">JIRA Board</a></p>
+            </div>
+
+            <div class="col-md-8 image-cog">
+                <h2>Test Case queueing</h2>
+
+                <div class="">
+                    @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data", test = Model }))
             {
-                    @Html.Hidden("id", 0)
-                    <p id="Name0">418 A</p>
+                        @Html.Hidden("id", 0)
+                        <p id="Name0">418 A</p>
                         <table>
                             <tr>
                                 <td colspan="3" id="status0">*Loading*</td>
@@ -92,12 +94,12 @@
                                 <td colspan="2"><input class="btn btn-test" type="submit" value="Queue Test Case" /></td>
                             </tr>
                         </table>
-                }
-                <p> </p>
-                @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    }
+                    <p> </p>
+                    @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
-                    @Html.Hidden("id", 1)
-                    <p id="Name1">418 B</p>
+                        @Html.Hidden("id", 1)
+                        <p id="Name1">418 B</p>
                         <table>
                             <tr>
                                 <td colspan="3" id="status1">*Loading*</td>
@@ -114,12 +116,12 @@
                                 <td colspan="2"><input class="btn btn-test" type="submit" value="Queue Test Case" /></td>
                             </tr>
                         </table>
-                }
-                <p> </p>
-                @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    }
+                    <p> </p>
+                    @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
-                    @Html.Hidden("id", 2)
-                    <p id="Name2">419 A</p>
+                        @Html.Hidden("id", 2)
+                        <p id="Name2">419 A</p>
                         <table>
                             <tr><td colspan="3" id="status2">*Loading*</td></tr>
                             <tr>
@@ -134,12 +136,12 @@
                                 <td colspan="2"><input class="btn btn-test" type="submit" value="Queue Test Case" /></td>
                             </tr>
                         </table>
-                }
-                <p> </p>
-                @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    }
+                    <p> </p>
+                    @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
-                    @Html.Hidden("id", 3)
-                    <p id="Name3">419 B</p>
+                        @Html.Hidden("id", 3)
+                        <p id="Name3">419 B</p>
                         <table>
                             <tr>
                                 <td colspan="3" id="status3">*Loading*</td>
@@ -156,9 +158,9 @@
                                 <td colspan="2"><input class="btn btn-test" type="submit" value="Queue Test Case" /></td>
                             </tr>
                         </table>
-                }
+                    }
+                </div>
             </div>
-        </div>
 
+        </div>
     </div>
-</div>
