@@ -18,7 +18,7 @@ namespace TestStationStatusInfrastructure
             base.Load(builder);
             var assemblyToScan = new[] { ThisAssembly };
 
-            string[] IpLoopUpsToTry = { "INDELPC217", "INDELNB352" };
+            string[] IpLoopUpsToTry = { "INDELPC217", "INDELNB352" ,"INDELNB365" };
 
             builder.RegisterType<RefreshClientService>().SingleInstance();
             builder.RegisterType<TestStationContextFactory>().SingleInstance();

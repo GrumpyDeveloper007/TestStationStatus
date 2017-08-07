@@ -90,21 +90,7 @@ namespace TestStationStatus.Controllers
             _model.PCName = Environment.MachineName;
             if (id.HasValue)
             {
-                switch (id.Value)
-                {
-                    case 0:
-                        _model.PCName = "418A";
-                        break;
-                    case 1:
-                        _model.PCName = "418B";
-                        break;
-                    case 2:
-                        _model.PCName = "419A";
-                        break;
-                    case 3:
-                        _model.PCName = "419B";
-                        break;
-                }
+                _model.PCName = _localDataService.PCName;
             }
 
             return View(_model);

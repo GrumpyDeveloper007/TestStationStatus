@@ -120,13 +120,9 @@ namespace TestStationStatusInfrastructure.Service
                     {
                         var homeModel = new HomeScreenUpdate(_localDataService.Count());
 
-                        homeModel.Station[0].Name = "418A";
-                        homeModel.Station[1].Name = "418B";
-                        homeModel.Station[2].Name = "419A";
-                        homeModel.Station[3].Name = "419B";
-
                         for (int i=0;i<_localDataService.Count();i++ )
                         {
+                            homeModel.Station[i].Name = _localDataService[i].PCName;
                             homeModel.Station[i].Status = _localDataService[i].CurrentModel.GetStatusMessage();
                             homeModel.Station[i].CurrentScript = _localDataService[i].CurrentModel.TestScript;
                         }
@@ -174,15 +170,27 @@ namespace TestStationStatusInfrastructure.Service
 
                 var localDataServiceA = GetLocalTestDataService(0); 
                 localDataServiceA.WorkingFolder = @"\\ausydpc418\KF2_ATS";
+                localDataServiceA.PCName = "418A (E420)";
 
                 var localDataServiceB = GetLocalTestDataService(1); 
                 localDataServiceB.WorkingFolder = @"\\ausydpc418\KF2_ATSB";
+                localDataServiceB.PCName = "418B (E420)";
 
                 var localDataServiceA2 = GetLocalTestDataService(2);
                 localDataServiceA2.WorkingFolder = @"\\ausydpc419\KF2_ATS";
+                localDataServiceA2.PCName = "419A (USeries)";
 
                 var localDataServiceB2 = GetLocalTestDataService(3);
                 localDataServiceB2.WorkingFolder = @"\\ausydpc419\KF2_ATSB";
+                localDataServiceB2.PCName = "419B (USeries)";
+
+                var localDataServiceC = GetLocalTestDataService(4);
+                localDataServiceC.WorkingFolder = @"\\ausydpc322\KF2_ATS";
+                localDataServiceC.PCName = "322 (E420)";
+
+                var localDataServiceD = GetLocalTestDataService(5);
+                localDataServiceD.WorkingFolder = @"\\ausydpc323\KF2_ATS";
+                localDataServiceD.PCName = "323 (USeries)";
 
                 BackgroundWorker = new System.Threading.Thread(new System.Threading.ThreadStart(thread));
                 Running = true;

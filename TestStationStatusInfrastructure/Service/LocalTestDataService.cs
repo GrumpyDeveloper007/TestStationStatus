@@ -24,6 +24,7 @@ namespace TestStationStatusInfrastructure.Service
 
         public string WorkingFolder = @"C:\kf2_ats";
         public StatusModel CurrentModel = new StatusModel();
+        public string PCName { get; set; }
 
         public LocalTestDataService(IpAddressService ipAddressService)
         {

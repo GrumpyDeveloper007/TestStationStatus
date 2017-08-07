@@ -11,7 +11,7 @@
     background-position-x :0;
     background-position-y :0;
     float:left,right;
-    height :620px;
+    height :760px;
 }
 
 .image-Status
@@ -22,7 +22,7 @@
     background-blend-mode: overlay;
     background-repeat: no-repeat;
     float:left,right;
-    height :620px;
+    height :760px;
 }
 
 .table
