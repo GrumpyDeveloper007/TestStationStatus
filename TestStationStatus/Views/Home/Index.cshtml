@@ -84,14 +84,14 @@
                     @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data", test = Model }))
             {
                         @Html.Hidden("id", 0)
-                        <p id="Name0">418 A</p>
+                        <p id="Name0">@Model.Model.Station[0].Name</p>
                         <table>
                             <tr>
-                                <td colspan="3" id="status0">*Loading*</td>
+                                <td colspan="3" id="status0">@Model.Model.Station[0].Status</td>
                             </tr>
                             <tr>
                                 <td>Current( or last) Script:</td>
-                                <td id="currentScript0">*Loading*</td>
+                                <td id="currentScript0">@Model.Model.Station[0].CurrentScript</td>
                                 <td><input class="btn btn-test" type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Home",new { id = 0 })'" /></td>
                             </tr>
                             <tr>
@@ -106,14 +106,14 @@
                     @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                         @Html.Hidden("id", 1)
-                        <p id="Name1">418 B</p>
+                        <p id="Name1">@Model.Model.Station[1].Name</p>
                         <table>
                             <tr>
-                                <td colspan="3" id="status1">*Loading*</td>
+                                <td colspan="3" id="status1">@Model.Model.Station[1].Status</td>
                             </tr>
                             <tr>
                                 <td>Current( or last) Script:</td>
-                                <td id="currentScript1">*Loading*</td>
+                                <td id="currentScript1">@Model.Model.Station[1].CurrentScript</td>
                                 <td><input class="btn btn-test" type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Home",new { id = 1 })'" /></td>
                             </tr>
                             <tr>
@@ -128,12 +128,12 @@
                     @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                         @Html.Hidden("id", 2)
-                        <p id="Name2">419 A</p>
+                        <p id="Name2">@Model.Model.Station[2].Name</p>
                         <table>
-                            <tr><td colspan="3" id="status2">*Loading*</td></tr>
+                            <tr><td colspan="3" id="status2">@Model.Model.Station[2].Status</td></tr>
                             <tr>
                                 <td>Current( or last) Script:</td>
-                                <td id="currentScript2">*Loading*</td>
+                                <td id="currentScript2">@Model.Model.Station[2].CurrentScript</td>
                                 <td><input class="btn btn-test" type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Home",new { id = 2 })'" /></td>
                             </tr>
                             <tr>
@@ -148,12 +148,12 @@
                     @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                         @Html.Hidden("id", 4)
-                        <p id="Name4">322</p>
+                        <p id="Name4">@Model.Model.Station[4].Name</p>
                         <table>
-                            <tr><td colspan="3" id="status4">*Loading*</td></tr>
+                            <tr><td colspan="3" id="status4">@Model.Model.Station[4].Status</td></tr>
                             <tr>
                                 <td>Current( or last) Script:</td>
-                                <td id="currentScript4">*Loading*</td>
+                                <td id="currentScript4">@Model.Model.Station[4].CurrentScript</td>
                                 <td><input class="btn btn-test" type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Home",new { id = 4 })'" /></td>
                             </tr>
                             <tr>
@@ -168,12 +168,12 @@
                     @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                         @Html.Hidden("id", 5)
-                        <p id="Name5">323</p>
+                        <p id="Name5">@Model.Model.Station[5].Name</p>
                         <table>
-                            <tr><td colspan="3" id="status5">*Loading*</td></tr>
+                            <tr><td colspan="3" id="status5">@Model.Model.Station[5].Status</td></tr>
                             <tr>
                                 <td>Current( or last) Script:</td>
-                                <td id="currentScript5">*Loading*</td>
+                                <td id="currentScript5">@Model.Model.Station[5].CurrentScript</td>
                                 <td><input class="btn btn-test" type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Home",new { id = 5 })'" /></td>
                             </tr>
                             <tr>

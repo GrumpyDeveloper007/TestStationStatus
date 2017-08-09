@@ -11,6 +11,7 @@ namespace TestStationStatus.Controllers
 {
     public class HomeController : Controller
     {
+        private HomeViewModel _model;
 
         RefreshClientService _dataUpdatedClient;
         LocalTestDataService _LocalTestDataServiceA1;
@@ -33,13 +34,21 @@ namespace TestStationStatus.Controllers
 
         public ActionResult Index()
         {
+            _model = new HomeViewModel();
             if (_dataUpdatedClient.BackgroundWorker == null)
             {
                 //new List<LocalTestDataService> { _LocalTestDataServiceA1, _LocalTestDataServiceB1, _LocalTestDataServiceA2, _LocalTestDataServiceB2 }
                 _dataUpdatedClient.StartService();
             }
 
-            return View();
+            while (_dataUpdatedClient.LatestModel==null )
+            {
+                System.Threading.Thread.Sleep(1000);
+            }
+
+            _model.Model = _dataUpdatedClient.LatestModel;
+
+            return View(_model);
         }
 
         [HttpPost]

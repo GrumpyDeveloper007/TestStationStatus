@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using TestStationStatusInfrastructure.HubPayload;
 
 namespace TestStationStatus.Models
 {
@@ -11,6 +12,8 @@ namespace TestStationStatus.Models
         public HttpPostedFileBase[] filesB;
         public HttpPostedFileBase[] filesA2;
         public HttpPostedFileBase[] filesB2;
+
+        public HomeScreenUpdate Model { get; set; }
 
         public HomeViewModel()
         {

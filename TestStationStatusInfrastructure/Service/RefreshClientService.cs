@@ -26,6 +26,7 @@ namespace TestStationStatusInfrastructure.Service
         ServerDataService _ServerDataService;
         IpAddressService _IpAddressService;
         IHubConnectionContext<IMonitorHub> _MonitorHub;
+        public HomeScreenUpdate LatestModel;
 
 
         public RefreshClientService(ServerDataService serverDataService, IpAddressService ipAddressService)
@@ -100,6 +101,8 @@ namespace TestStationStatusInfrastructure.Service
                 model.QueueDuration = CalculateDuration(model.QueueItems, ref model.QueueDurationKnown);
             if (!string.IsNullOrWhiteSpace(model.TestScript))
                 model.TestScriptLastDuration = _ServerDataService.GetDurationOfTestCase(model.TestScript);
+            else
+                model.TestScriptLastDuration = 0;
         }
 
         private void thread()
@@ -128,6 +131,7 @@ namespace TestStationStatusInfrastructure.Service
                         }
 
                         _MonitorHub.All.HomeUpdated(homeModel);
+                        LatestModel = homeModel;
                     }
                     catch (Exception ex)
                     {
