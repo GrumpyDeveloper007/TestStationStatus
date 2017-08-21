@@ -64,7 +64,6 @@ namespace TestStationStatusInfrastructure.Service
                     _logger.Log(LogLevel.Debug, "unknown duration:" + fileName + "duration:" + duration);
                 }
                 duration += fileDuration;
-
             }
             return duration;
         }
@@ -95,10 +94,12 @@ namespace TestStationStatusInfrastructure.Service
                 SaveDuration(model);
             }
 
-            //if (IsListDifferent(model.MonitorFiles, oldModel.MonitorFiles))
                 model.MonitorDuration = CalculateDuration(model.MonitorFiles, ref model.MonitorDurationKnown);
-            //if (IsListDifferent(model.QueueItems, oldModel.QueueItems))
-                model.QueueDuration = CalculateDuration(model.QueueItems, ref model.QueueDurationKnown);
+           // _logger.Log(LogLevel.Debug, "monitor duration:" + model.MonitorDuration);
+
+            model.QueueDuration = CalculateDuration(model.QueueItems, ref model.QueueDurationKnown);
+           // _logger.Log(LogLevel.Debug, "queue count:" + model.QueueItems.Count ());
+           // _logger.Log(LogLevel.Debug, "queue duration:" + model.QueueDuration);
             if (!string.IsNullOrWhiteSpace(model.TestScript))
                 model.TestScriptLastDuration = _ServerDataService.GetDurationOfTestCase(model.TestScript);
             else

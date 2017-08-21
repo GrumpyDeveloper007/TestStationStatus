@@ -91,12 +91,10 @@ namespace TestStationStatusInfrastructure.Service
 
                     if (existingRecord == null)
                     {
-                        _logger.Log(LogLevel.Debug, "Duration not found for test case : " + fileName);
                         return 0;
                     }
                     else
                     {
-                        //_logger.Log(LogLevel.Debug, "Duration found for test case : " + fileName + " duration : " + existingRecord.DurationSeconds);
                         return existingRecord.DurationSeconds;
                     }
 

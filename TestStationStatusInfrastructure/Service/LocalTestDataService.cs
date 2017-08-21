@@ -106,76 +106,89 @@ namespace TestStationStatusInfrastructure.Service
                 model.QueueDuration = CurrentModel.QueueDuration;
                 model.MonitorDurationKnown = CurrentModel.MonitorDurationKnown;
 
-                if (System.IO.File.Exists(WorkingFolder + @"\e420\ApplicationSummary.txt"))
+                if (Directory.Exists(WorkingFolder + @"\E420MonitorTestPlan"))
                 {
-                    var lines = System.IO.File.ReadAllLines(WorkingFolder + @"\e420\ApplicationSummary.txt");
-                    model.StatusFile.AddRange(lines);
-                }
 
-                if (System.IO.File.Exists(WorkingFolder + @"\e420\ApplicationStatus.txt"))
-                {
-                    var status = System.IO.File.ReadAllLines(WorkingFolder + @"\e420\ApplicationStatus.txt");
-                    model.ApplicationStatus = status[0];
-                    if (status.Count() > 1)
+                    if (System.IO.File.Exists(WorkingFolder + @"\e420\ApplicationSummary.txt"))
                     {
-                        if (!string.IsNullOrWhiteSpace(status[1]))
-                            model.LastUpdateTime = status[1];
+                        var lines = System.IO.File.ReadAllLines(WorkingFolder + @"\e420\ApplicationSummary.txt");
+                        model.StatusFile.AddRange(lines);
                     }
-                    if (status.Count() > 2)
+
+                    if (System.IO.File.Exists(WorkingFolder + @"\e420\ApplicationStatus.txt"))
                     {
-                        if (!string.IsNullOrWhiteSpace(status[2]))
-                            model.TestScript = Path.GetFileName(status[2]);
+                        var status = System.IO.File.ReadAllLines(WorkingFolder + @"\e420\ApplicationStatus.txt");
+                        model.ApplicationStatus = status[0];
+                        if (status.Count() > 1)
+                        {
+                            if (!string.IsNullOrWhiteSpace(status[1]))
+                                model.LastUpdateTime = status[1];
+                        }
+                        if (status.Count() > 2)
+                        {
+                            if (!string.IsNullOrWhiteSpace(status[2]))
+                                model.TestScript = Path.GetFileName(status[2]);
+                        }
+                        if (status.Count() > 3)
+                        {
+                            if (!string.IsNullOrWhiteSpace(status[3]))
+                                model.LogFile = status[3];
+                        }
                     }
-                    if (status.Count() > 3)
+                    else
                     {
-                        if (!string.IsNullOrWhiteSpace(status[3]))
-                            model.LogFile = status[3];
+                        model.ApplicationStatus = "No status to report, please run a test script";
+                    }
+
+                    if (System.IO.File.Exists(WorkingFolder + @"\e420\ApplicationResults.txt"))
+                    {
+                        var lines = System.IO.File.ReadAllLines(WorkingFolder + @"\e420\ApplicationResults.txt");
+                        model.ResultsFile.AddRange(lines);
+                    }
+
+
+                    model.QueueItems.Clear();
+                    if (Directory.Exists(WorkingFolder + @"\queue\"))
+                    {
+                        var queueItems = Directory.GetFiles(WorkingFolder + @"\queue\", "*.TST");
+                        var completedItems = Directory.GetFiles(WorkingFolder + @"\queue\", "*.LST");
+                        foreach (string item in queueItems)
+                        {
+                            bool found = false;
+                            string fileName = System.IO.Path.GetFileName(item);
+                            foreach (string completedItem in completedItems)
+                            {
+                                if (completedItem.Contains(fileName))
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (found == false)
+                            {
+
+                                model.QueueItems.Add(Path.GetFileName(fileName));
+                            }
+                        }
+                    }
+
+                    if (Directory.Exists(WorkingFolder + @"\E420MonitorTestPlan"))
+                    {
+                        var monitorFiles = Directory.GetFiles(WorkingFolder + @"\E420MonitorTestPlan", "*.TST");
+                        model.MonitorFiles = new List<string>();
+                        foreach (var file in monitorFiles)
+                        {
+                            model.MonitorFiles.Add(Path.GetFileName(file));
+                        }
                     }
                 }
                 else
                 {
-                    model.ApplicationStatus = "No status to report, please run a test script";
+                    model.ApplicationStatus = "PC OFFLINE";
+                    model.TestScript = "PC OFFLINE";
                 }
 
-                if (System.IO.File.Exists(WorkingFolder + @"\e420\ApplicationResults.txt"))
-                {
-                    var lines = System.IO.File.ReadAllLines(WorkingFolder + @"\e420\ApplicationResults.txt");
-                    model.ResultsFile.AddRange(lines);
-                }
-
-                var queueItems = System.IO.Directory.GetFiles(WorkingFolder + @"\queue\", "*.TST");
-                var completedItems = System.IO.Directory.GetFiles(WorkingFolder + @"\queue\", "*.LST");
-                model.QueueItems.Clear();
-                foreach (string item in queueItems)
-                {
-                    bool found = false;
-                    string fileName = System.IO.Path.GetFileName(item);
-                    foreach (string completedItem in completedItems)
-                    {
-                        if (completedItem.Contains(fileName))
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (found == false)
-                    {
-
-                        model.QueueItems.Add(Path.GetFileName(fileName));
-                    }
-                }
-
-                var monitorFiles = System.IO.Directory.GetFiles(WorkingFolder + @"\E420MonitorTestPlan", "*.TST");
-                model.MonitorFiles = new List<string>();
-                foreach (var file in monitorFiles)
-                {
-                    model.MonitorFiles.Add(Path.GetFileName(file));
-                }
-                model.QueueDuration = 0;
-                model.QueueDurationKnown = true;
-                model.MonitorDuration = 0;
-                model.MonitorDurationKnown = true;
                 CurrentModel = model;
             }
             catch (Exception ex)
