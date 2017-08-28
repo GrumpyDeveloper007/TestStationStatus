@@ -11,5 +11,6 @@ namespace TestStationStatusInfrastructure.HubPayload
         public string Name { get; set; }
         public string Status { get; set; }
         public string CurrentScript { get; set; }
+        public string ScriptStyle { get; set; }
     }
 }

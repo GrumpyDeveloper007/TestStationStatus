@@ -105,6 +105,19 @@
         </tr>
     </table>
 
+    <p>Fail Messages</p>
+    <table class="tg">
+
+        @foreach (var item in Model.FailMessages)
+        {
+            <tr>
+                <td>
+                    @item
+                </td>
+            </tr>
+        }
+    </table>
+
 
     <p>Queue</p>
     <table class="tg">

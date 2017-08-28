@@ -20,6 +20,7 @@ namespace TestStationStatus.Models
         public List<string> ResultsFile;
         public List<string> QueueItems;
         public List<string> MonitorFiles;
+        public List<string> FailMessages;
         public double QueueDuration;
         public double MonitorDuration;
         public double TestScriptLastDuration;
@@ -32,6 +33,7 @@ namespace TestStationStatus.Models
             ResultsFile = new List<string>();
             QueueItems = new List<string>();
             MonitorFiles = new List<string>();
+            FailMessages = new List<string>();
             ApplicationStatus = "";
             QueueDurationKnown = true;
             MonitorDurationKnown = true;
@@ -79,6 +81,18 @@ namespace TestStationStatus.Models
             {
                 return TimeSpan.FromSeconds(MonitorDuration).ToString(@"hh\:mm\:ss") + (MonitorDurationKnown ? "" : "?");
             }
+        }
+
+        public string ScriptStyle
+        {
+            get
+            {
+                if (FailMessages.Count == 0)
+                    return "ok";
+                else
+                    return "failed";
+            }
+            set { }
         }
 
     }

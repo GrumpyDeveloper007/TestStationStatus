@@ -129,6 +129,7 @@ namespace TestStationStatusInfrastructure.Service
                             homeModel.Station[i].Name = _localDataService[i].PCName;
                             homeModel.Station[i].Status = _localDataService[i].CurrentModel.GetStatusMessage();
                             homeModel.Station[i].CurrentScript = _localDataService[i].CurrentModel.TestScript;
+                            homeModel.Station[i].ScriptStyle = _localDataService[i].CurrentModel.ScriptStyle;
                         }
 
                         _MonitorHub.All.HomeUpdated(homeModel);

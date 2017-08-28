@@ -21,8 +21,10 @@ namespace TestStationStatus.Models
         public List<string> ResultsFile;
         public List<string> QueueItems;
         public List<string> MonitorFiles;
+        public List<string> FailMessages;
         public HttpPostedFileBase file;
         public string LastUpdateTimeString { get; set; }
+        public string ScriptStyle { get; set; }
 
         public StatusViewModel()
         {
@@ -30,7 +32,7 @@ namespace TestStationStatus.Models
             ResultsFile = new List<string>();
             QueueItems = new List<string>();
             MonitorFiles = new List<string>();
-            
+            FailMessages= new List<string>();
         }
 
         public StatusViewModel(StatusModel model)
@@ -44,6 +46,8 @@ namespace TestStationStatus.Models
             ResultsFile = model.ResultsFile;
             QueueItems = model.QueueItems;
             MonitorFiles = model.MonitorFiles;
+            ScriptStyle = model.ScriptStyle;
+            FailMessages = model.FailMessages;
             TestPlanActive = model.TestPlanActive;
             WebQueryTime = model.WebQueryTime;
             LastUpdateTimeString = model.LastUpdateTimeString;

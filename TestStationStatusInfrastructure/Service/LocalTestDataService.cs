@@ -33,7 +33,7 @@ namespace TestStationStatusInfrastructure.Service
 
         public void KillCurrentTestCase()
         {
-            System.IO.File.WriteAllText(WorkingFolder + @"\e420\KillSwitch.txt", "Stop");
+            File.WriteAllText(WorkingFolder + @"\e420\KillSwitch.txt", "Stop");
         }
 
         public void UploadFile(HttpPostedFileBase[] files, string iPAddress)
@@ -77,11 +77,11 @@ namespace TestStationStatusInfrastructure.Service
 
         public bool IsMidnightRunning()
         {
-            if (System.IO.File.Exists(WorkingFolder + @"\Controller\MidnightLock.lst"))
+            if (File.Exists(WorkingFolder + @"\Controller\MidnightLock.lst"))
             {
                 return true;
             }
-            if (System.IO.File.Exists(WorkingFolder + @"\Controller-AUSYDPC419\MidnightLock.lst"))
+            if (File.Exists(WorkingFolder + @"\Controller-AUSYDPC419\MidnightLock.lst"))
             {
                 return true;
             }
@@ -109,15 +109,15 @@ namespace TestStationStatusInfrastructure.Service
                 if (Directory.Exists(WorkingFolder + @"\E420MonitorTestPlan"))
                 {
 
-                    if (System.IO.File.Exists(WorkingFolder + @"\e420\ApplicationSummary.txt"))
+                    if (File.Exists(WorkingFolder + @"\e420\ApplicationSummary.txt"))
                     {
-                        var lines = System.IO.File.ReadAllLines(WorkingFolder + @"\e420\ApplicationSummary.txt");
+                        var lines = File.ReadAllLines(WorkingFolder + @"\e420\ApplicationSummary.txt");
                         model.StatusFile.AddRange(lines);
                     }
 
-                    if (System.IO.File.Exists(WorkingFolder + @"\e420\ApplicationStatus.txt"))
+                    if (File.Exists(WorkingFolder + @"\e420\ApplicationStatus.txt"))
                     {
-                        var status = System.IO.File.ReadAllLines(WorkingFolder + @"\e420\ApplicationStatus.txt");
+                        var status = File.ReadAllLines(WorkingFolder + @"\e420\ApplicationStatus.txt");
                         model.ApplicationStatus = status[0];
                         if (status.Count() > 1)
                         {
@@ -140,12 +140,21 @@ namespace TestStationStatusInfrastructure.Service
                         model.ApplicationStatus = "No status to report, please run a test script";
                     }
 
-                    if (System.IO.File.Exists(WorkingFolder + @"\e420\ApplicationResults.txt"))
+                    if (File.Exists(WorkingFolder + @"\e420\ApplicationResults.txt"))
                     {
-                        var lines = System.IO.File.ReadAllLines(WorkingFolder + @"\e420\ApplicationResults.txt");
+                        var lines = File.ReadAllLines(WorkingFolder + @"\e420\ApplicationResults.txt");
                         model.ResultsFile.AddRange(lines);
                     }
 
+                    if (File.Exists(WorkingFolder + @"\e420\scriptErrors.txt"))
+                    {
+                        var lines = File.ReadAllLines(WorkingFolder + @"\e420\scriptErrors.txt");
+                        model.FailMessages.AddRange(lines);
+                    }
+                    else
+                    {
+                        model.FailMessages.Clear();
+                    }
 
                     model.QueueItems.Clear();
                     if (Directory.Exists(WorkingFolder + @"\queue\"))
@@ -155,7 +164,7 @@ namespace TestStationStatusInfrastructure.Service
                         foreach (string item in queueItems)
                         {
                             bool found = false;
-                            string fileName = System.IO.Path.GetFileName(item);
+                            string fileName = Path.GetFileName(item);
                             foreach (string completedItem in completedItems)
                             {
                                 if (completedItem.Contains(fileName))
