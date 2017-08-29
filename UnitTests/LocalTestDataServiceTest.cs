@@ -51,7 +51,7 @@ namespace UnitTests
                 File.Delete(objectUnderTest.WorkingFolder + @"\E420MonitorTestPlan\" + file.FileName);
             }
 
-            objectUnderTest.UploadFile (new TestPostedFileBase[] { file },"1.0.0.7" );
+            objectUnderTest.UploadFile (new TestPostedFileBase[] { file },"1.0.0.7","test@email.com" );
 
             Assert.IsTrue(File.Exists(objectUnderTest.WorkingFolder + @"\E420MonitorTestPlan\" + file.FileName));
         }
@@ -78,7 +78,7 @@ namespace UnitTests
             }
 
 
-            objectUnderTest.UploadFile(filecollection, "1.0.0.7");
+            objectUnderTest.UploadFile(filecollection, "1.0.0.7",null);
 
             Assert.IsTrue(File.Exists(objectUnderTest.WorkingFolder + @"\E420MonitorTestPlan\" + file.FileName));
         }

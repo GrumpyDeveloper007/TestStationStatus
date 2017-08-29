@@ -153,12 +153,12 @@ namespace TestStationStatusInfrastructure.Service
             _localDataService[index].KillCurrentTestCase();
         }
 
-        public void UploadFile(int index, HttpFileCollectionBase files, string IP)
+        public void UploadFile(int index, HttpFileCollectionBase files, string IP, string emailAddress)
         {
             // Verify that the user selected a file
             if (files != null && files.Count>0 && files[0] != null && files[0].ContentLength > 0)
             {
-                _localDataService[index].UploadFile(files, IP);
+                _localDataService[index].UploadFile(files, IP, emailAddress);
             }
         }
 

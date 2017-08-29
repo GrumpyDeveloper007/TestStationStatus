@@ -46,10 +46,17 @@ namespace TestStationStatus.Controllers
         public ActionResult Upload(StatusViewModel model, HttpPostedFileBase[] file)
         {
             string IP = Request.UserHostName;
-            // Verify that the user selected a file
-            if (file != null && file[0]!=null && file[0].ContentLength > 0)
+            string userName = null;
+
+            if (User != null && User.Identity != null && !string.IsNullOrWhiteSpace(User.Identity.Name))
             {
-                _localDataService.UploadFile(file,IP);
+                userName = User.Identity.Name;
+            }
+
+            // Verify that the user selected a file
+            if (file != null && file[0] != null && file[0].ContentLength > 0)
+            {
+                _localDataService.UploadFile(file, IP, userName);
             }
             return Redirect(Request.UrlReferrer.ToString());
         }
@@ -59,10 +66,17 @@ namespace TestStationStatus.Controllers
         {
             string IP = Request.UserHostName;
             var file = Request.Files;
+            string userName = null;
+
+            if (User != null && User.Identity != null && !string.IsNullOrWhiteSpace(User.Identity.Name))
+            {
+                userName = User.Identity.Name;
+            }
+
             // Verify that the user selected a file
             if (file != null && file[0] != null && file[0].ContentLength > 0)
             {
-                _localDataService.UploadFile(file, IP);
+                _localDataService.UploadFile(file, IP, userName);
             }
             return Redirect(Request.UrlReferrer.ToString());
         }

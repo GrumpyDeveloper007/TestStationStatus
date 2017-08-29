@@ -36,7 +36,7 @@ namespace TestStationStatusInfrastructure.Service
             File.WriteAllText(WorkingFolder + @"\e420\KillSwitch.txt", "Stop");
         }
 
-        public void UploadFile(HttpPostedFileBase[] files, string iPAddress)
+        public void UploadFile(HttpPostedFileBase[] files, string iPAddress, string emailAddress)
         {
             string computerName = _IpAddressService.DetermineComputerName(iPAddress);
 
@@ -48,14 +48,26 @@ namespace TestStationStatusInfrastructure.Service
                 var path = Path.Combine(WorkingFolder + @"\E420MonitorTestPlan", fileName);
                 file.SaveAs(path);
 
-                string[] lines = File.ReadAllLines(path);
-                lines[0] = "{<TestMeta><ComputerName>" + computerName + "</ComputerName></TestMeta>}" + lines[0];
-
-                File.WriteAllLines(path, lines);
+                AddMeta(path, computerName, emailAddress);
             }
         }
 
-        public void UploadFile(HttpFileCollectionBase files, string iPAddress)
+        private void AddMeta(string path, string computerName,string emailAddress)
+        {
+            string[] lines = File.ReadAllLines(path);
+            string meta = "{<TestMeta>";
+            meta += "<ComputerName>" + computerName + "</ComputerName>";
+            if (emailAddress != null)
+            {
+                meta += "<emailAddress>" + emailAddress + "</emailAddress>";
+            }
+            meta += "</TestMeta>}";
+            lines[0] = meta + lines[0];
+
+            File.WriteAllLines(path, lines);
+        }
+
+        public void UploadFile(HttpFileCollectionBase files, string iPAddress, string emailAddress)
         {
             string computerName = _IpAddressService.DetermineComputerName(iPAddress);
 
@@ -68,10 +80,7 @@ namespace TestStationStatusInfrastructure.Service
                 var path = Path.Combine(WorkingFolder + @"\E420MonitorTestPlan", fileName);
                 file.SaveAs(path);
 
-                string[] lines = File.ReadAllLines(path);
-                lines[0] = "{<TestMeta><ComputerName>" + computerName + "</ComputerName></TestMeta>}" + lines[0];
-
-                File.WriteAllLines(path, lines);
+                AddMeta(path, computerName, emailAddress);
             }
         }
 

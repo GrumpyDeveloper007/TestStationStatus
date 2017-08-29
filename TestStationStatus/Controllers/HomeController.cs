@@ -52,12 +52,19 @@ namespace TestStationStatus.Controllers
         }
 
         [HttpPost]
-        public ActionResult Upload2(int id,HomeViewModel test)
+        public ActionResult Upload2(int id, HomeViewModel test)
         {
             string IP = Request.UserHostName;
             var file = Request.Files;
+            string userName = null;
+
+            if (User != null && User.Identity != null && !string.IsNullOrWhiteSpace(User.Identity.Name))
+            {
+                userName = User.Identity.Name;
+            }
+
             // Verify that the user selected a file
-            _dataUpdatedClient.UploadFile(id, file, IP);
+            _dataUpdatedClient.UploadFile(id, file, IP, userName);
             return Redirect(Request.UrlReferrer.ToString());
         }
 
