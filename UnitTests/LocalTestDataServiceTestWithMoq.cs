@@ -40,7 +40,7 @@ namespace UnitTests
                 File.Delete(objectUnderTest.WorkingFolder + @"\E420MonitorTestPlan\" + file.Object.FileName);
             }
 
-            objectUnderTest.UploadFile(files.Object, "1.0.0.7");
+            objectUnderTest.UploadFile(files.Object, "1.0.0.7",null);
 
             Assert.IsTrue(File.Exists(objectUnderTest.WorkingFolder + @"\E420MonitorTestPlan\" + file.Object.FileName));
         }
