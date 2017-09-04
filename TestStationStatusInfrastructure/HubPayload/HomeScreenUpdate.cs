@@ -20,7 +20,7 @@ namespace TestStationStatusInfrastructure.HubPayload
             Station = new List<HomeScreenStationStatus>();
             for (int i = 0; i < stations; i++)
             {
-                Station.Add(new HomeScreenStationStatus());
+                Station.Add(new HomeScreenStationStatus(i));
             }
         }
 

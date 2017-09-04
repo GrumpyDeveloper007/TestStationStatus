@@ -186,15 +186,15 @@ namespace TestStationStatusInfrastructure.Service
                 localDataServiceA2.WorkingFolder = @"\\ausydpc419\KF2_ATS";
                 localDataServiceA2.PCName = "419A (USeries)";
 
-                var localDataServiceB2 = GetLocalTestDataService(3);
-                localDataServiceB2.WorkingFolder = @"\\ausydpc419\KF2_ATSB";
-                localDataServiceB2.PCName = "419B (USeries)";
+                //var localDataServiceB2 = GetLocalTestDataService(3);
+                //localDataServiceB2.WorkingFolder = @"\\ausydpc419\KF2_ATSB";
+                //localDataServiceB2.PCName = "419B (USeries)";
 
-                var localDataServiceC = GetLocalTestDataService(4);
+                var localDataServiceC = GetLocalTestDataService(3);
                 localDataServiceC.WorkingFolder = @"\\ausydpc322\KF2_ATS";
                 localDataServiceC.PCName = "322 (E420)";
 
-                var localDataServiceD = GetLocalTestDataService(5);
+                var localDataServiceD = GetLocalTestDataService(4);
                 localDataServiceD.WorkingFolder = @"\\ausydpc323\KF2_ATS";
                 localDataServiceD.PCName = "323 (USeries)";
 

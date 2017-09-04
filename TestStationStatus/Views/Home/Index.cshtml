@@ -31,34 +31,13 @@
         // This function is triggered by the server at regular intervals, the latest data is passed
         // as a parameter, this new data is pushed in the the current html structure
         function HomeUpdated(homeModel) {
-            $('#Name0').text(homeModel.Station[0].Name);
-            $('#Name1').text(homeModel.Station[1].Name);
-            $('#Name2').text(homeModel.Station[2].Name);
-            $('#Name3').text(homeModel.Station[3].Name);
-            $('#Name4').text(homeModel.Station[4].Name);
-            $('#Name5').text(homeModel.Station[5].Name);
-
-
-            $('#status0').text(homeModel.Station[0].Status);
-            $('#status1').text(homeModel.Station[1].Status);
-            $('#status2').text(homeModel.Station[2].Status);
-            $('#status3').text(homeModel.Station[3].Status);
-            $('#status4').text(homeModel.Station[4].Status);
-            $('#status5').text(homeModel.Station[5].Status);
-
-            $('#currentScript0').text(homeModel.Station[0].CurrentScript);
-            $('#currentScript1').text(homeModel.Station[1].CurrentScript);
-            $('#currentScript2').text(homeModel.Station[2].CurrentScript);
-            $('#currentScript3').text(homeModel.Station[3].CurrentScript);
-            $('#currentScript4').text(homeModel.Station[4].CurrentScript);
-            $('#currentScript5').text(homeModel.Station[5].CurrentScript);
-
-            $('#currentScript0').addClass(homeModel.Station[0].ScriptStyle);
-            $('#currentScript1').addClass(homeModel.Station[1].ScriptStyle);
-            $('#currentScript2').addClass(homeModel.Station[2].ScriptStyle);
-            $('#currentScript3').addClass(homeModel.Station[3].ScriptStyle);
-            $('#currentScript4').addClass(homeModel.Station[4].ScriptStyle);
-            $('#currentScript5').addClass(homeModel.Station[5].ScriptStyle);
+            for (i = 0; i < homeModel.Station.length; i++)
+            {
+                $('#Name' + i).text(homeModel.Station[i].Name);
+                $('#Status'+i).text(homeModel.Station[i].Status);
+                $('#CurrentScript'+i).text(homeModel.Station[i].CurrentScript);
+                $('#CurrentScript'+i).addClass(homeModel.Station[i].ScriptStyle);
+            }
         };
     </script>
 }
@@ -75,12 +54,11 @@
             <h2>Status Page @Environment.MachineName</h2>
             <p> </p>
             <p>Hold CTRL to open in a new tab</p>
+            @foreach (var station in @Model.Model.Station)
+            {
             <!-- Here we have a button for each test station -->
-            <p><a class="btn btn-status" href="@Url.Action("Index", "Status")?id=0">Status Page 418 A</a></p>
-            <p><a class="btn btn-status" href="@Url.Action("Index", "Status")?id=1">Status Page 418 B</a></p>
-            <p><a class="btn btn-status" href="@Url.Action("Index", "Status")?id=2">Status Page 419 A</a></p>
-            <p><a class="btn btn-status" href="@Url.Action("Index", "Status")?id=4">Status Page 322</a></p>
-            <p><a class="btn btn-status" href="@Url.Action("Index", "Status")?id=5">Status Page 323</a></p>
+                <p><a class="btn btn-status" href="@Url.Action("Index", "Status")?id=@station.Id">Status Page @station.Name</a></p>
+            }
             <p> </p>
             <p><a href="http://ausydvs25:8181/project.html?projectId=Embedded_E420_AutoTest&tab=projectOverview">Team City Results Data</a></p>
 
@@ -91,19 +69,21 @@
             <h2>Test Case queueing</h2>
 
             <div class="">
+@foreach (var station in @Model.Model.Station)
+{
                 <!-- Here we have a section for each test station -->
-                @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data", test = Model }))
+                using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data", test = Model }))
                 {
-                    @Html.Hidden("id", 0)
-                    <p id="Name0">@Model.Model.Station[0].Name</p>
+                    @Html.Hidden("id", @station.Id)
+                    <p id="@station.NameId">@station.Name</p>
                         <table>
                             <tr>
-                                <td colspan="3" id="status0">@Model.Model.Station[0].Status</td>
+                                <td colspan="3" id="@station.StatusId">@station.Status</td>
                             </tr>
                             <tr>
                                 <td>Current( or last) Script:</td>
-                                <td id="currentScript0" class="@Model.Model.Station[0].ScriptStyle">@Model.Model.Station[0].CurrentScript</td>
-                                <td><input class="btn btn-test" type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Home",new { id = 0 })'" /></td>
+                                <td id="@station.CurrentScriptId" class="@station.ScriptStyle">@station.CurrentScript</td>
+                                <td><input class="btn btn-test" type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Home", new { id = station.Id })'" /></td>
                             </tr>
                             <tr>
                                 <td>
@@ -113,88 +93,8 @@
                             </tr>
                         </table>
                 }
-                <p> </p>
-                @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                {
-                    @Html.Hidden("id", 1)
-                    <p id="Name1">@Model.Model.Station[1].Name</p>
-                        <table>
-                            <tr>
-                                <td colspan="3" id="status1">@Model.Model.Station[1].Status</td>
-                            </tr>
-                            <tr>
-                                <td>Current( or last) Script:</td>
-                                <td id="currentScript1" class="@Model.Model.Station[1].ScriptStyle">@Model.Model.Station[1].CurrentScript</td>
-                                <td><input class="btn btn-test" type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Home",new { id = 1 })'" /></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="file" name="file" multiple />
-                                </td>
-                                <td colspan="2"><input class="btn btn-test" type="submit" value="Queue Test Case" /></td>
-                            </tr>
-                        </table>
-                }
-                <p> </p>
-                @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                {
-                    @Html.Hidden("id", 2)
-                    <p id="Name2">@Model.Model.Station[2].Name</p>
-                        <table>
-                            <tr><td colspan="3" id="status2">@Model.Model.Station[2].Status</td></tr>
-                            <tr>
-                                <td>Current( or last) Script:</td>
-                                <td id="currentScript2" class="@Model.Model.Station[2].ScriptStyle">@Model.Model.Station[2].CurrentScript</td>
-                                <td><input class="btn btn-test" type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Home",new { id = 2 })'" /></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="file" name="file" multiple />
-                                </td>
-                                <td colspan="2"><input class="btn btn-test" type="submit" value="Queue Test Case" /></td>
-                            </tr>
-                        </table>
-                }
-                <p> </p>
-                @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                {
-                    @Html.Hidden("id", 4)
-                    <p id="Name4">@Model.Model.Station[4].Name</p>
-                        <table>
-                            <tr><td colspan="3" id="status4">@Model.Model.Station[4].Status</td></tr>
-                            <tr>
-                                <td>Current( or last) Script:</td>
-                                <td id="currentScript4" class="@Model.Model.Station[4].ScriptStyle">@Model.Model.Station[4].CurrentScript</td>
-                                <td><input class="btn btn-test" type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Home",new { id = 4 })'" /></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="file" name="file" multiple />
-                                </td>
-                                <td colspan="2"><input class="btn btn-test" type="submit" value="Queue Test Case" /></td>
-                            </tr>
-                        </table>
-                }
-                <p> </p>
-                @using (Html.BeginForm("Upload2", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                {
-                    @Html.Hidden("id", 5)
-                    <p id="Name5">@Model.Model.Station[5].Name</p>
-                        <table>
-                            <tr><td colspan="3" id="status5">@Model.Model.Station[5].Status</td></tr>
-                            <tr>
-                                <td>Current( or last) Script:</td>
-                                <td id="currentScript5" class="@Model.Model.Station[5].ScriptStyle">@Model.Model.Station[5].CurrentScript</td>
-                                <td><input class="btn btn-test" type="button" title="Cancel" value="Cancel" onclick="location.href='@Url.Action("Cancel", "Home",new { id = 5 })'" /></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="file" name="file" multiple />
-                                </td>
-                                <td colspan="2"><input class="btn btn-test" type="submit" value="Queue Test Case" /></td>
-                            </tr>
-                        </table>
-                }
+    <p> </p>
+}
                 <p> </p>
             </div>
         </div>
